@@ -14,19 +14,17 @@ CLI for Heroku Partner/ISV Integrations
 * [Commands](#commands)
 <!-- tocstop -->
 # Usage
-<!-- usage -->
+
 ```sh-session
-$ npm install -g heroku-cli-plugin-partner
-$ heroku COMMAND
+$ heroku plugins:install @heroku-cli/plugin-partner
+$ heroku partner:COMMAND
 running command...
-$ heroku (--version)
-heroku-cli-plugin-partner/0.0.0 darwin-arm64 node-v22.17.1
-$ heroku --help [COMMAND]
+$ heroku partner --help [COMMAND]
 USAGE
-  $ heroku COMMAND
+  $ heroku partner:COMMAND
 ...
 ```
-<!-- usagestop -->
+
 # Commands
 <!-- commands -->
 * [`heroku partner:hello PERSON`](#heroku-partnerhello-person)
