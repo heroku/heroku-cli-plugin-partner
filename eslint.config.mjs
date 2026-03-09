@@ -11,9 +11,10 @@ export default [
   ...oclif,
   prettier,
   {
+    files: ['test/**/*.ts'],
     rules: {
-      // Turn off to support Node 18. You can remove this rule if you don't need to support Node 18.
-      'unicorn/prefer-module': 'off',
+      // Allow snake_case in test fixtures to match API responses
+      camelcase: 'off',
     }
   }
 ]

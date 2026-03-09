@@ -17,6 +17,6 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Hello)
 
-    this.log(`hello ${args.person} from ${flags.from}! (./src/commands/hello/index.ts)`)
+    this.log(`hello ${args.person} from ${flags.from}! (./src/commands/partner/hello/index.ts)`)
   }
 }
