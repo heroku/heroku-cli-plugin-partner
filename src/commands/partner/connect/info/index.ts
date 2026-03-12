@@ -42,15 +42,16 @@ export default class Info extends BaseCommand {
     }
 
     hux.styledObject({
-      'Contact Email': integration.contact_email || '',
-      'Created At': integration.created_at || '',
-      'Description': integration.description || '',
-      'Documentation URL': integration.docs_url || '',
+      'Slug': integration.slug,
+      'Partner Integration': integration.name,
+      'Contact Email': integration.contact_email,
+      'Team': integration.team,
+      'Description': integration.description,
+      'Documentation URL': integration.docs_url,
       'Logo URL': integration.logo_url ? `${integration.logo_url} <Default: Heroku>` : '',
-      'Partner Integration': integration.slug || integration.name,
-      'Status': integration.status || '',
-      'Team': integration.team_id || '',
-      'Updated At': integration.updated_at || '',
+      'Status': integration.status,
+      'Created At': integration.created_at,
+      'Updated At': integration.updated_at,
     })
   }
 }

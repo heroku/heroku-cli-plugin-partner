@@ -11,6 +11,12 @@ export default [
   ...oclif,
   prettier,
   {
+    rules: {
+      // Disable object sorting to preserve meaningful order
+      'perfectionist/sort-objects': 'off',
+    }
+  },
+  {
     files: ['test/**/*.ts'],
     rules: {
       // Allow snake_case in test fixtures to match API responses
