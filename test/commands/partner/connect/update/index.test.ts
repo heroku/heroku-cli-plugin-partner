@@ -1,0 +1,98 @@
+import {expect} from 'chai'
+import nock from 'nock'
+import {stderr, stdout} from 'stdout-stderr'
+
+import Cmd from '../../../../../src/commands/partner/connect/update'
+import {runCommand} from '../../../../run-command'
+
+const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
+
+const partnerConnectUpdateResponse = {
+  id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
+  team: 'my-team',
+  name: 'example',
+  description: 'Updated description',
+  docs_url: 'https://example.com/docs',
+  contact_email: 'partner@example.com',
+  logo_url: 'https://example.com/logo.png',
+  updated_at: '2021-06-01T00:00:00Z',
+}
+
+describe('partner:connect:update', () => {
+  let api: nock.Scope
+  const {env} = process
+  const id = '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36'
+
+  beforeEach(() => {
+    process.env = {}
+    api = nock('https://api.heroku.com')
+  })
+
+  afterEach(() => {
+    process.env = env
+    api.done()
+    nock.cleanAll()
+  })
+
+  it('sends a PATCH request with the correct accept header', async () => {
+    api
+      .patch(`/partner/connect/${id}`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(200, partnerConnectUpdateResponse)
+
+    await runCommand(Cmd, [id])
+
+    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stderr.output).to.equal('')
+  })
+
+  it('returns JSON output with --json flag', async () => {
+    api
+      .patch(`/partner/connect/${id}`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(200, partnerConnectUpdateResponse)
+
+    await runCommand(Cmd, [id, '--json'])
+
+    expect(stdout.output).to.contain(`"id": "${id}"`)
+    expect(stdout.output).to.contain('"description": "Updated description"')
+    expect(stderr.output).to.equal('')
+  })
+
+  it('sends optional flags in the request body', async () => {
+    const expectedBody = {
+      description: 'New description',
+      docs_url: 'https://example.com/docs',
+      contact_email: 'partner@example.com',
+      logo_url: 'https://example.com/logo.png',
+    }
+
+    api
+      .patch(`/partner/connect/${id}`, expectedBody)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(200, partnerConnectUpdateResponse)
+
+    await runCommand(Cmd, [
+      id,
+      '--description', 'New description',
+      '--docs_url', 'https://example.com/docs',
+      '--contact_email', 'partner@example.com',
+      '--logo_url', 'https://example.com/logo.png',
+    ])
+
+    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stderr.output).to.equal('')
+  })
+
+  it('omits undefined optional flags from the request body', async () => {
+    api
+      .patch(`/partner/connect/${id}`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(200, partnerConnectUpdateResponse)
+
+    await runCommand(Cmd, [id])
+
+    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stderr.output).to.equal('')
+  })
+})
