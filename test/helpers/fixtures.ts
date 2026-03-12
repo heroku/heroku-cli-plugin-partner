@@ -6,9 +6,15 @@ export const app: Heroku.App = {
 }
 
 export const partnerConnectInfo = {
+  contact_email: 'support@example.com',
   created_at: '2021-01-01T00:00:00Z',
+  description: 'Example integration for testing',
+  docs_url: 'https://docs.example.com',
   id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
-  name: 'example',
+  logo_url: 'https://example.com/logo.png',
+  name: 'Example Integration',
+  slug: 'example',
   status: 'active',
+  team_id: '123e4567-e89b-12d3-a456-426614174000',
   updated_at: '2021-01-01T00:00:00Z',
 }
