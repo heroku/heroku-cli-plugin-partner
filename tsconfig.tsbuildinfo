@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/commands/partner/connect/info/index.ts","./src/lib/base.ts","./src/lib/hux-wrapper.ts","./src/lib/partner/types.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/commands/partner/connect/deactivate/index.ts","./src/commands/partner/connect/info/index.ts","./src/lib/base.ts","./src/lib/hux-wrapper.ts","./src/lib/partner/types.ts"],"version":"5.9.3"}
