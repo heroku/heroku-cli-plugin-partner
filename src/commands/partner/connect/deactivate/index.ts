@@ -8,7 +8,9 @@ export default class Deactivate extends BaseCommand {
   static args = {
     slug: Args.string({description: 'Label used to uniquely identify the ISV', required: true}),
   }
-  static description = 'Deactivates a Heroku Connect partner integration for the specified team.\nDeactivation prevents customers from discovering or installing the integration,\nwhile preserving stored metadata for audit and potential reactivation.'
+  static description = `Deactivates a Heroku Connect partner integration for the specified team.
+Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
+It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.`
   static examples = [
     '$ heroku partner:connect:deactivate acme-integrations --team acme-team',
   ]

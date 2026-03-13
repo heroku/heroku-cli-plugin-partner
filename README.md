@@ -46,8 +46,8 @@ FLAGS
 
 DESCRIPTION
   Deactivates a Heroku Connect partner integration for the specified team.
-  Deactivation prevents customers from discovering or installing the integration,
-  while preserving stored metadata for audit and potential reactivation.
+  Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
+  It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
 
 EXAMPLES
   $ heroku partner:connect:deactivate acme-integrations --team acme-team
