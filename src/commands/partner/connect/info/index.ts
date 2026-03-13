@@ -6,11 +6,12 @@ import * as Partner from '../../../../lib/partner/types'
 
 export default class Info extends BaseCommand {
   static args = {
-    idOrSlug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    // eslint-disable-next-line camelcase
+    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
   static description = 'display all metadata fields for a Heroku Connect partner integration'
   static examples = [
-    '$ heroku partner:connect:info herokuconnect',
+    '$ heroku partner:connect:info acme-integrations',
   ]
   static flags = {
     json: Flags.boolean({description: 'output in JSON format'}),
@@ -19,7 +20,7 @@ export default class Info extends BaseCommand {
   async run(): Promise<void> {
     const hux = await getHux()
     const {args, flags} = await this.parse(Info)
-    const {idOrSlug} = args
+    const {id_or_slug: idOrSlug} = args
 
     let integration: Partner.PartnerConnect
     try {
