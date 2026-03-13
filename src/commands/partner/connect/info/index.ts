@@ -1,39 +1,57 @@
 import {Args, Flags} from '@oclif/core'
 
 import BaseCommand from '../../../../lib/base'
+import {getHux} from '../../../../lib/hux-wrapper'
+import * as Partner from '../../../../lib/partner/types'
 
 export default class Info extends BaseCommand {
   static args = {
-    id: Args.string({description: 'Partner Connect integration ID', required: true}),
+    idOrSlug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
-  static description = 'Show Partner Connect integration info'
+  static description = 'display all metadata fields for a Heroku Connect partner integration'
+  static examples = [
+    '$ heroku partner:connect:info herokuconnect',
+  ]
   static flags = {
-    json: Flags.boolean({description: 'Output in JSON format'}),
+    json: Flags.boolean({description: 'output in JSON format'}),
   }
 
   async run(): Promise<void> {
+    const hux = await getHux()
     const {args, flags} = await this.parse(Info)
+    const {idOrSlug} = args
 
-    const {body} = await this.apiClient.get<Record<string, unknown>>(`/partner/connect/${args.id}`)
+    let integration: Partner.PartnerConnect
+    try {
+      const endpoint = `/partner/connect/${idOrSlug}`
+      const {body} = await this.apiClient.get<Partner.PartnerConnect>(endpoint)
+      integration = body
+    } catch (error) {
+      const connErr = error as Partner.ConnectionError
+      if (connErr.body && connErr.body.id === 'record_not_found') {
+        this.error(`No partner integration found for ${idOrSlug}`)
+      } else {
+        const message = connErr.body?.message || connErr.message || 'Unknown error'
+        this.error(`Unable to retrieve partner integration details\nReason: ${message}`)
+      }
+    }
 
     if (flags.json) {
-      this.log(JSON.stringify(body, null, 2))
+      hux.styledJSON(integration)
       return
     }
 
-    const fields = [
-      ['Name:', body.name],
-      ['Slug:', body.slug],
-      ['Description:', body.description || '(none)'],
-      ['Docs URL:', body.docs_url || '(none)'],
-      ['Contact Email:', body.contact_email || '(none)'],
-      ['Logo URL:', body.logo_url || '(none)'],
-    ]
-
-    const maxLabelLength = Math.max(...fields.map(([label]) => String(label).length))
-
-    for (const [label, value] of fields) {
-      this.log(`${String(label).padEnd(maxLabelLength + 1)} ${value}`)
-    }
+    hux.styledObject({
+      'Slug': integration.slug,
+      'Partner Integration': integration.name,
+      'Contact Email': integration.contact_email,
+      'Team': integration.team,
+      'Description': integration.description,
+      'Documentation URL': integration.docs_url,
+      'Logo URL': integration.logo_url ? `${integration.logo_url} <Default: Heroku>` : '',
+      'Status': integration.status,
+      'Created At': integration.created_at,
+      'Updated At': integration.updated_at,
+    })
   }
 }
