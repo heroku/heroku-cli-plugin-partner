@@ -114,7 +114,7 @@ _See code: [src/commands/partner/connect/info/index.ts](https://github.com/herok
 
 ```
 mise install
-npm install
+yarn
 ```
 
 ## Generate the docs
