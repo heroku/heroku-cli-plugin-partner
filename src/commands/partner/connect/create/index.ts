@@ -37,7 +37,7 @@ export default class Create extends BaseCommand {
     logoFile: Flags.string({
       aliases: ['logo-path'],
       description:
-        'Optional image URL for the ISV logo. Must be path to a valid image file.',
+        'Optional image for the ISV logo. Must be path to a valid image file.',
     }),
   }
 

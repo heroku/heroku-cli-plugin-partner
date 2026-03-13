@@ -4,15 +4,19 @@ import BaseCommand from '../../../../lib/base'
 
 export default class Update extends BaseCommand {
     static args = {
-        id: Args.string({description: 'Partner Connect integration ID or slug', required: true}),
+        // eslint-disable-next-line camelcase
+        id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
     }
     static description = 'Update Partner Connect integration'
+    static examples = [
+        '$ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"',
+    ]
     static flags = {
         json: Flags.boolean({description: 'Output in JSON format'}),
-        description: Flags.string({description: 'Description', required: false}),
-        docs_url: Flags.string({description: 'Docs URL', required: false}),
-        contact_email: Flags.string({description: 'Contact Email', required: false}),
-        logo_url: Flags.string({description: 'Logo URL', required: false}),
+        description: Flags.string({description: 'Description of the integration (up to 500 characters).', required: false}),
+        docsUrl: Flags.string({description: 'Link to partner’s documentation or onboarding guide. Must be a valid URL. URL', required: false}),
+        contactEmail: Flags.string({description: 'Contact email for integration support. Must be a valid email address.', required: false}),
+        logoUrl: Flags.string({description: 'Image for the ISV logo. Must be path to a valid image file.', required: false}),
     }
 
     async run(): Promise<void> {
@@ -20,11 +24,11 @@ export default class Update extends BaseCommand {
 
         const updateBody: Record<string, string> = {}
         if (flags.description) updateBody.description = flags.description
-        if (flags.docs_url) updateBody.docs_url = flags.docs_url
-        if (flags.contact_email) updateBody.contact_email = flags.contact_email
-        if (flags.logo_url) updateBody.logo_url = flags.logo_url
+        if (flags.docsUrl) updateBody.docs_url = flags.docsUrl
+        if (flags.contactEmail) updateBody.contact_email = flags.contactEmail
+        if (flags.logoUrl) updateBody.logo_url = flags.logoUrl
 
-        const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id}`, {
+        const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id_or_slug}`, {
             body: updateBody,
         })
 
@@ -33,6 +37,6 @@ export default class Update extends BaseCommand {
             return
         }
 
-        this.log(`Partner Connect integration ${args.id} updated successfully`)
+        this.log(`Partner Connect integration ${args.id_or_slug} updated successfully`)
     }
 }

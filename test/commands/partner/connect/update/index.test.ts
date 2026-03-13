@@ -12,9 +12,9 @@ const partnerConnectUpdateResponse = {
   team: 'my-team',
   name: 'example',
   description: 'Updated description',
-  docs_url: 'https://example.com/docs',
-  contact_email: 'partner@example.com',
-  logo_url: 'https://example.com/logo.png',
+  docsUrl: 'https://example.com/docs',
+  contactEmail: 'partner@example.com',
+  logoUrl: 'https://example.com/logo.png',
   updated_at: '2021-06-01T00:00:00Z',
 }
 
@@ -62,9 +62,9 @@ describe('partner:connect:update', () => {
   it('sends optional flags in the request body', async () => {
     const expectedBody = {
       description: 'New description',
-      docs_url: 'https://example.com/docs',
-      contact_email: 'partner@example.com',
-      logo_url: 'https://example.com/logo.png',
+      docsUrl: 'https://example.com/docs',
+      contactEmail: 'partner@example.com',
+      logoUrl: 'https://example.com/logo.png',
     }
 
     api
@@ -75,9 +75,9 @@ describe('partner:connect:update', () => {
     await runCommand(Cmd, [
       id,
       '--description', 'New description',
-      '--docs_url', 'https://example.com/docs',
-      '--contact_email', 'partner@example.com',
-      '--logo_url', 'https://example.com/logo.png',
+      '--docsUrl', 'https://example.com/docs',
+      '--contactEmail', 'partner@example.com',
+      '--logoUrl', 'https://example.com/logo.png',
     ])
 
     expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)

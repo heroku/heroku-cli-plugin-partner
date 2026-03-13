@@ -30,6 +30,7 @@ USAGE
 * [`heroku partner:connect:create SLUG`](#heroku-partnerconnectcreate-slug)
 * [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
+* [`heroku partner:connect:update ID_OR_SLUG`](#heroku-partnerconnectupdate-id_or_slug)
 
 ## `heroku partner:connect:create SLUG`
 
@@ -48,7 +49,7 @@ FLAGS
   --description=<value>   (required) Description of the integration (up to 500 characters).
   --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
   --isvName=<value>       (required) Name of the ISV or partner publishing the integration.
-  --logoFile=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
+  --logoFile=<value>      Optional image for the ISV logo. Must be path to a valid image file.
   --team=<value>          (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
@@ -105,4 +106,32 @@ EXAMPLES
 ```
 
 _See code: [src/commands/partner/connect/info/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info/index.ts)_
+
+## `heroku partner:connect:update ID_OR_SLUG`
+
+Update Partner Connect integration
+
+```
+USAGE
+  $ heroku partner:connect:update ID_OR_SLUG [--json] [--description <value>] [--docsUrl <value>] [--contactEmail <value>]
+    [--logoUrl <value>]
+
+ARGUMENTS
+  ID_OR_SLUG  Partner Connect integration ID or integration name
+
+FLAGS
+  --contactEmail=<value>  Contact email for integration support. Must be a valid email address.
+  --description=<value>   Description of the integration (up to 500 characters).
+  --docsUrl=<value>       Link to partner’s documentation or onboarding guide. Must be a valid URL. URL
+  --json                  Output in JSON format
+  --logoUrl=<value>       Image for the ISV logo. Must be path to a valid image file.
+
+DESCRIPTION
+  Update Partner Connect integration
+
+EXAMPLES
+  $ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"
+```
+
+_See code: [src/commands/partner/connect/update/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/update/index.ts)_
 <!-- commandsstop -->
