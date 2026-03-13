@@ -32,25 +32,22 @@ USAGE
 
 ## `heroku partner:connect:deactivate SLUG`
 
-Deactivates a Heroku Connect partner integration for the specified team.
+Deactivates a Heroku Connect partner integration.
 
 ```
 USAGE
-  $ heroku partner:connect:deactivate SLUG --team <value>
+  $ heroku partner:connect:deactivate SLUG
 
 ARGUMENTS
   SLUG  Label used to uniquely identify the ISV
 
-FLAGS
-  --team=<value>  (required) The Heroku team that owns this partner integration
-
 DESCRIPTION
-  Deactivates a Heroku Connect partner integration for the specified team.
+  Deactivates a Heroku Connect partner integration.
   Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
   It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
 
 EXAMPLES
-  $ heroku partner:connect:deactivate acme-integrations --team acme-team
+  $ heroku partner:connect:deactivate acme-integrations
 ```
 
 _See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_
