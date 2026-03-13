@@ -27,19 +27,19 @@ USAGE
 
 # Commands
 <!-- commands -->
-* [`heroku partner:connect:deactivate SLUG`](#heroku-partnerconnectdeactivate-slug)
+* [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
 
-## `heroku partner:connect:deactivate SLUG`
+## `heroku partner:connect:deactivate ID_OR_SLUG`
 
 Deactivates a Heroku Connect partner integration.
 
 ```
 USAGE
-  $ heroku partner:connect:deactivate SLUG
+  $ heroku partner:connect:deactivate ID_OR_SLUG
 
 ARGUMENTS
-  SLUG  Label used to uniquely identify the ISV
+  ID_OR_SLUG  Partner Connect integration ID or integration name
 
 DESCRIPTION
   Deactivates a Heroku Connect partner integration.

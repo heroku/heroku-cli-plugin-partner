@@ -4,7 +4,8 @@ import BaseCommand from '../../../../lib/base'
 
 export default class Deactivate extends BaseCommand {
   static args = {
-    slug: Args.string({description: 'Label used to uniquely identify the ISV', required: true}),
+    // eslint-disable-next-line camelcase
+    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
   static description = `Deactivates a Heroku Connect partner integration.
 Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
@@ -15,10 +16,9 @@ It also destroys any existing Heroku Connect add-ons that are associated with th
 
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Deactivate)
-    const {slug} = args
-    const {team} = flags
+    const {id_or_slug: idOrSlug} = args
 
     // TODO: Implement deactivation logic
-    this.log(`Deactivating integration ${slug} for team ${team}...`)
+    this.log(`Deactivating integration ${idOrSlug}...`)
   }
 }
