@@ -9,7 +9,7 @@ export default class Create extends BaseCommand {
     slug: Args.string({description: 'Label used to uniquely identify the integration', required: true}),
   }
   static description =
-    'Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku connect and Salesforce setup flows.'
+    'Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.'
   static examples = [
     '$ heroku partner:connect:create herokuconnect --team acme-team --isv-name "Acme Integrations"',
   ]
@@ -28,7 +28,7 @@ export default class Create extends BaseCommand {
     }),
     docsUrl: Flags.string({
       description:
-        'Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.',
+        'Optional link to partner’s documentation or onboarding guide. Must be a valid URL.',
     }),
     contactEmail: Flags.string({
       description: 'Contact email for integration support. Must be a valid email address.',
