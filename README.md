@@ -27,7 +27,33 @@ USAGE
 
 # Commands
 <!-- commands -->
+* [`heroku partner:connect:deactivate SLUG`](#heroku-partnerconnectdeactivate-slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
+
+## `heroku partner:connect:deactivate SLUG`
+
+Deactivates a Heroku Connect partner integration for the specified team.
+
+```
+USAGE
+  $ heroku partner:connect:deactivate SLUG --team <value>
+
+ARGUMENTS
+  SLUG  Label used to uniquely identify the ISV
+
+FLAGS
+  --team=<value>  (required) The Heroku team that owns this partner integration
+
+DESCRIPTION
+  Deactivates a Heroku Connect partner integration for the specified team.
+  Deactivation prevents customers from discovering or installing the integration,
+  while preserving stored metadata for audit and potential reactivation.
+
+EXAMPLES
+  $ heroku partner:connect:deactivate acme-integrations --team acme-team
+```
+
+_See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_
 
 ## `heroku partner:connect:info ID_OR_SLUG`
 
@@ -38,7 +64,7 @@ USAGE
   $ heroku partner:connect:info ID_OR_SLUG [--json]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or slug
+  ID_OR_SLUG  Partner Connect integration ID or integration name
 
 FLAGS
   --json  output in JSON format
@@ -47,7 +73,7 @@ DESCRIPTION
   display all metadata fields for a Heroku Connect partner integration
 
 EXAMPLES
-  $ heroku partner:connect:info herokuconnect
+  $ heroku partner:connect:info acme-integrations
 ```
 
 _See code: [src/commands/partner/connect/info/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info/index.ts)_

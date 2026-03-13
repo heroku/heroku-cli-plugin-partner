@@ -6,11 +6,11 @@ import * as Partner from '../../../../lib/partner/types'
 
 export default class Info extends BaseCommand {
   static args = {
-    idOrSlug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
   static description = 'display all metadata fields for a Heroku Connect partner integration'
   static examples = [
-    '$ heroku partner:connect:info herokuconnect',
+    '$ heroku partner:connect:info acme-integrations',
   ]
   static flags = {
     json: Flags.boolean({description: 'output in JSON format'}),
@@ -19,17 +19,17 @@ export default class Info extends BaseCommand {
   async run(): Promise<void> {
     const hux = await getHux()
     const {args, flags} = await this.parse(Info)
-    const {idOrSlug} = args
+    const {id_or_slug} = args
 
     let integration: Partner.PartnerConnect
     try {
-      const endpoint = `/partner/connect/${idOrSlug}`
+      const endpoint = `/partner/connect/${id_or_slug}`
       const {body} = await this.apiClient.get<Partner.PartnerConnect>(endpoint)
       integration = body
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       if (connErr.body && connErr.body.id === 'record_not_found') {
-        this.error(`No partner integration found for ${idOrSlug}`)
+        this.error(`No partner integration found for ${id_or_slug}`)
       } else {
         const message = connErr.body?.message || connErr.message || 'Unknown error'
         this.error(`Unable to retrieve partner integration details\nReason: ${message}`)
