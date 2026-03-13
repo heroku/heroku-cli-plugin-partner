@@ -22,5 +22,16 @@ interface connectionError extends Error {
   }
 }
 
+type createPartnerConnect = {
+  contactEmail?: string
+  description?: string
+  docsUrl?: string
+  isvName: string
+  logoFile?: string
+  slug: string
+  team: string
+}
+
 export type PartnerConnect = partnerConnect
 export type ConnectionError = connectionError
+export type CreatePartnerConnect = createPartnerConnect
