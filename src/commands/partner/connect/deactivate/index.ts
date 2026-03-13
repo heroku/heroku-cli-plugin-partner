@@ -1,8 +1,6 @@
 import {Args, Flags} from '@oclif/core'
 
 import BaseCommand from '../../../../lib/base'
-import {getHux} from '../../../../lib/hux-wrapper'
-import * as Partner from '../../../../lib/partner/types'
 
 export default class Deactivate extends BaseCommand {
   static args = {
@@ -19,7 +17,6 @@ It also destroys any existing Heroku Connect add-ons that are associated with th
   }
 
   async run(): Promise<void> {
-    const hux = await getHux()
     const {args, flags} = await this.parse(Deactivate)
     const {slug} = args
     const {team} = flags
