@@ -6,12 +6,12 @@ import * as Partner from '../../../../lib/partner/types'
 
 export default class Create extends BaseCommand {
   static args = {
-    slug: Args.string({description: 'Label used to uniquely identify the integration', required: true}),
+    slug: Args.string({description: 'Label used to uniquely identify the ISV', required: true}),
   }
   static description =
     'Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.'
   static examples = [
-    '$ heroku partner:connect:create herokuconnect --team acme-team --isv-name "Acme Integrations"',
+    '$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"',
   ]
   static flags = {
     team: Flags.string({

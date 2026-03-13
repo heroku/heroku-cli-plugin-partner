@@ -32,7 +32,7 @@ USAGE
 
 ## `heroku partner:connect:create SLUG`
 
-Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku connect and Salesforce setup flows.
+Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.
 
 ```
 USAGE
@@ -40,22 +40,22 @@ USAGE
     [--docsUrl <value>] [--logoFile <value>]
 
 ARGUMENTS
-  SLUG  Label used to uniquely identify the integration
+  SLUG  Label used to uniquely identify the ISV
 
 FLAGS
   --contactEmail=<value>  (required) Contact email for integration support. Must be a valid email address.
   --description=<value>   (required) Description of the integration (up to 500 characters).
-  --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.
+  --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
   --isvName=<value>       (required) Name of the ISV or partner publishing the integration.
   --logoFile=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
   --team=<value>          (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
-  Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku connect and
+  Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and
   Salesforce setup flows.
 
 EXAMPLES
-  $ heroku partner:connect:create herokuconnect --team acme-team --isv-name "Acme Integrations"
+  $ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"
 ```
 
 _See code: [src/commands/partner/connect/create/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/create/index.ts)_
