@@ -6,7 +6,7 @@ import * as Partner from '../../../../lib/partner/types'
 
 export default class Info extends BaseCommand {
   static args = {
-    idOrSlug: Args.string({description: 'Partner Connect integration ID or slug', required: true}),
+    idOrSlug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
   static description = 'display all metadata fields for a Heroku Connect partner integration'
   static examples = [
