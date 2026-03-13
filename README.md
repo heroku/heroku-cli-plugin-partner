@@ -27,50 +27,82 @@ USAGE
 
 # Commands
 <!-- commands -->
-* [`heroku partner:connect:info ID`](#heroku-partnerconnectinfo-id)
-* [`heroku partner:hello PERSON`](#heroku-partnerhello-person)
+* [`heroku partner:connect:create SLUG`](#heroku-partnerconnectcreate-slug)
+* [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
+* [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
 
-## `heroku partner:connect:info ID`
+## `heroku partner:connect:create SLUG`
 
-Show Partner Connect integration info
+Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.
 
 ```
 USAGE
-  $ heroku partner:connect:info ID [--json]
+  $ heroku partner:connect:create SLUG --team <value> --isvName <value> --description <value> --contactEmail <value>
+    [--docsUrl <value>] [--logoFile <value>]
 
 ARGUMENTS
-  ID  Partner Connect integration ID
+  SLUG  Label used to uniquely identify the ISV
 
 FLAGS
-  --json  Output in JSON format
+  --contactEmail=<value>  (required) Contact email for integration support. Must be a valid email address.
+  --description=<value>   (required) Description of the integration (up to 500 characters).
+  --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
+  --isvName=<value>       (required) Name of the ISV or partner publishing the integration.
+  --logoFile=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
+  --team=<value>          (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
-  Show Partner Connect integration info
+  Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and
+  Salesforce setup flows.
+
+EXAMPLES
+  $ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"
+```
+
+_See code: [src/commands/partner/connect/create/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/create/index.ts)_
+
+## `heroku partner:connect:deactivate ID_OR_SLUG`
+
+Deactivates a Heroku Connect partner integration.
+
+```
+USAGE
+  $ heroku partner:connect:deactivate ID_OR_SLUG
+
+ARGUMENTS
+  ID_OR_SLUG  Partner Connect integration ID or integration name
+
+DESCRIPTION
+  Deactivates a Heroku Connect partner integration.
+  Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
+  It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
+
+EXAMPLES
+  $ heroku partner:connect:deactivate acme-integrations
+```
+
+_See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_
+
+## `heroku partner:connect:info ID_OR_SLUG`
+
+display all metadata fields for a Heroku Connect partner integration
+
+```
+USAGE
+  $ heroku partner:connect:info ID_OR_SLUG [--json]
+
+ARGUMENTS
+  ID_OR_SLUG  Partner Connect integration ID or integration name
+
+FLAGS
+  --json  output in JSON format
+
+DESCRIPTION
+  display all metadata fields for a Heroku Connect partner integration
+
+EXAMPLES
+  $ heroku partner:connect:info acme-integrations
 ```
 
 _See code: [src/commands/partner/connect/info/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info/index.ts)_
-
-## `heroku partner:hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ heroku partner:hello PERSON -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ heroku partner:hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [src/commands/partner/hello/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/hello/index.ts)_
 <!-- commandsstop -->
