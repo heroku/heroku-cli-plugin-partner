@@ -18,14 +18,14 @@ export default class Update extends BaseCommand {
     async run(): Promise<void> {
         const {args, flags} = await this.parse(Update)
 
+        const updateBody: Record<string, string> = {}
+        if (flags.description) updateBody.description = flags.description
+        if (flags.docs_url) updateBody.docs_url = flags.docs_url
+        if (flags.contact_email) updateBody.contact_email = flags.contact_email
+        if (flags.logo_url) updateBody.logo_url = flags.logo_url
+
         const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id}`, {
-            body: {
-                team: args.team,
-                description: flags.description || undefined,
-                docs_url: flags.docs_url || undefined,
-                contact_email: flags.contact_email || undefined,
-                logo_url: flags.logo_url || undefined,
-            }
+            body: updateBody,
         })
 
         if (flags.json) {

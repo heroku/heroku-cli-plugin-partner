@@ -84,9 +84,9 @@ describe('partner:connect:update', () => {
     expect(stderr.output).to.equal('')
   })
 
-  it('omits undefined optional flags from the request body', async () => {
+  it('omits unprovided optional flags from the request body', async () => {
     api
-      .patch(`/partner/connect/${id}`)
+      .patch(`/partner/connect/${id}`, {})
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
       .reply(200, partnerConnectUpdateResponse)
 

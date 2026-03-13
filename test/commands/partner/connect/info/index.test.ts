@@ -7,7 +7,7 @@ import {partnerConnectInfo} from '../../../../helpers/fixtures'
 import stripAnsi from '../../../../helpers/strip-ansi'
 import {runCommand} from '../../../../run-command'
 
-const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner-connect'
+const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
 describe('partner:connect:info', () => {
   let api: nock.Scope
