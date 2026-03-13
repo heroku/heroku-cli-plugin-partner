@@ -65,8 +65,8 @@
   "repository": "heroku/heroku-cli-plugin-partner",
   "scripts": {
     "prepare": "yarn build",
-    "build:dist": "rm -rf dist && tsc -b && oclif manifest && mv oclif.manifest.json ./dist/oclif.manifest.json",
-    "build": "rm -rf dist && tsc -b && oclif manifest && oclif readme && mv oclif.manifest.json ./dist/oclif.manifest.json && cp README.md ./dist/README.md",
+    "build:dist": "rm -rf dist && tsc -b --force && oclif manifest && mv oclif.manifest.json ./dist/oclif.manifest.json",
+    "build": "rm -rf dist && tsc -b --force && oclif manifest && oclif readme && mv oclif.manifest.json ./dist/oclif.manifest.json && cp README.md ./dist/README.md",
     "lint": "eslint .",
     "pretest": "yarn build:dist",
     "posttest": "yarn lint",
