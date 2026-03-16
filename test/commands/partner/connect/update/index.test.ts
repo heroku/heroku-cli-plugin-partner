@@ -11,10 +11,10 @@ const partnerConnectUpdateResponse = {
   id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
   name: 'example',
   description: 'Updated description',
-  docs_url: 'https://example.com/docs',
-  contact_email: 'partner@example.com',
-  logo_file: '/path/to/logo.png',
-  updated_at: '2021-06-01T00:00:00Z',
+  docsUrl: 'https://example.com/docs',
+  contactEmail: 'partner@example.com',
+  logoFile: '/path/to/logo.png',
+  updatedAt: '2021-06-01T00:00:00Z',
 }
 
 describe('partner:connect:update', () => {
@@ -61,9 +61,9 @@ describe('partner:connect:update', () => {
   it('sends optional flags in the request body', async () => {
     const expectedBody = {
       description: 'New description',
-      docs_url: 'https://example.com/docs',
-      contact_email: 'partner@example.com',
-      logo_file: '/path/to/logo.png',
+      docsUrl: 'https://example.com/docs',
+      contactEmail: 'partner@example.com',
+      logoFile: '/path/to/logo.png',
     }
 
     api

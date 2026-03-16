@@ -24,9 +24,9 @@ export default class Update extends BaseCommand {
 
         const updateBody: Record<string, string> = {}
         if (flags.description) updateBody.description = flags.description
-        if (flags.docsUrl) updateBody.docs_url = flags.docsUrl
-        if (flags.contactEmail) updateBody.contact_email = flags.contactEmail
-        if (flags.logoFile) updateBody.logo_file = flags.logoFile
+        if (flags.docsUrl) updateBody.docsUrl = flags.docsUrl
+        if (flags.contactEmail) updateBody.contactEmail = flags.contactEmail
+        if (flags.logoFile) updateBody.logoFile = flags.logoFile
 
         const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id_or_slug}`, {
             body: updateBody,
