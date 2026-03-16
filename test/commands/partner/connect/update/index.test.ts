@@ -9,12 +9,11 @@ const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.pa
 
 const partnerConnectUpdateResponse = {
   id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
-  team: 'my-team',
   name: 'example',
   description: 'Updated description',
-  docsUrl: 'https://example.com/docs',
-  contactEmail: 'partner@example.com',
-  logoUrl: 'https://example.com/logo.png',
+  docs_url: 'https://example.com/docs',
+  contact_email: 'partner@example.com',
+  logo_file: '/path/to/logo.png',
   updated_at: '2021-06-01T00:00:00Z',
 }
 
@@ -62,9 +61,9 @@ describe('partner:connect:update', () => {
   it('sends optional flags in the request body', async () => {
     const expectedBody = {
       description: 'New description',
-      docsUrl: 'https://example.com/docs',
-      contactEmail: 'partner@example.com',
-      logoUrl: 'https://example.com/logo.png',
+      docs_url: 'https://example.com/docs',
+      contact_email: 'partner@example.com',
+      logo_file: '/path/to/logo.png',
     }
 
     api
@@ -77,7 +76,7 @@ describe('partner:connect:update', () => {
       '--description', 'New description',
       '--docsUrl', 'https://example.com/docs',
       '--contactEmail', 'partner@example.com',
-      '--logoUrl', 'https://example.com/logo.png',
+      '--logoFile', '/path/to/logo.png',
     ])
 
     expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)

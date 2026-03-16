@@ -16,7 +16,7 @@ export default class Update extends BaseCommand {
         description: Flags.string({description: 'Description of the integration (up to 500 characters).', required: false}),
         docsUrl: Flags.string({description: 'Link to partner’s documentation or onboarding guide. Must be a valid URL. URL', required: false}),
         contactEmail: Flags.string({description: 'Contact email for integration support. Must be a valid email address.', required: false}),
-        logoUrl: Flags.string({description: 'Image for the ISV logo. Must be path to a valid image file.', required: false}),
+        logoFile: Flags.string({description: 'Image for the ISV logo. Must be path to a valid image file.', required: false}),
     }
 
     async run(): Promise<void> {
@@ -26,7 +26,7 @@ export default class Update extends BaseCommand {
         if (flags.description) updateBody.description = flags.description
         if (flags.docsUrl) updateBody.docs_url = flags.docsUrl
         if (flags.contactEmail) updateBody.contact_email = flags.contactEmail
-        if (flags.logoUrl) updateBody.logo_url = flags.logoUrl
+        if (flags.logoFile) updateBody.logo_file = flags.logoFile
 
         const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id_or_slug}`, {
             body: updateBody,
