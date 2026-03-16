@@ -38,19 +38,19 @@ Creates a new partner integration record for Heroku Connect and stores ISV metad
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isvName <value> --description <value> --contactEmail <value>
-    [--docsUrl <value>] [--logoFile <value>]
+  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--description <value>] [--docs-url <value>]
+    [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  Label used to uniquely identify the ISV
 
 FLAGS
-  --contactEmail=<value>  (required) Contact email for integration support. Must be a valid email address.
-  --description=<value>   (required) Description of the integration (up to 500 characters).
-  --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
-  --isvName=<value>       (required) Name of the ISV or partner publishing the integration.
-  --logoFile=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
-  --team=<value>          (required) The Heroku team that owns this partner integration.
+  --contact-email=<value>  Optional contact email for integration support. Must be a valid email address.
+  --description=<value>    Optional description of the integration (up to 500 characters).
+  --docs-url=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.
+  --isv-name=<value>       (required) Name of the ISV or partner publishing the integration.
+  --logo-file=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
+  --team=<value>           (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
   Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and
