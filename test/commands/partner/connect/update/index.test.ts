@@ -92,8 +92,8 @@ describe('partner:connect:update', () => {
     try {
       await runCommand(Cmd, [id])
       expect.fail('Expected command to throw')
-    } catch (error: any) {
-      expect(error.message).to.contain('Couldn\'t find that integration.')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.contain('Couldn\'t find that integration.')
     }
   })
 
@@ -106,8 +106,8 @@ describe('partner:connect:update', () => {
     try {
       await runCommand(Cmd, ['1234567890', '--description', "New description"])
       expect.fail('Expected command to throw')
-    } catch (error: any) {
-      expect(error.message).to.contain('id not a uuid.')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.contain('id not a uuid.')
     }
   })
 
