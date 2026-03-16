@@ -1,4 +1,5 @@
 import {Args, Flags} from '@oclif/core'
+import {getHux} from '../../../../lib/hux-wrapper'
 
 import BaseCommand from '../../../../lib/base'
 
@@ -37,6 +38,17 @@ export default class Update extends BaseCommand {
             return
         }
 
-        this.log(`Partner Connect integration ${args.id_or_slug} updated successfully`)
+        this.log('✓ Partner integration created')
+        this.log('')
+
+        const hux = await getHux()
+
+        hux.styledObject({
+        'ISV Name': body.isvName,
+        'Description': body.description || 'none',
+        'Documentation': body.docsUrl || 'none',
+        'Contact Email': body.contactEmail || 'none',
+        'Logo': body.logoFile || 'none',
+        })
     }
 }

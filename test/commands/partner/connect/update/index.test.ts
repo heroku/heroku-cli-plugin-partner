@@ -1,15 +1,30 @@
 import {expect} from 'chai'
 import nock from 'nock'
+import * as sinon from 'sinon'
 import {stderr, stdout} from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/update'
+import * as huxWrapper from '../../../../../src/lib/hux-wrapper'
 import {runCommand} from '../../../../run-command'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
+const mockHux = {
+  styledJSON(obj: unknown) {
+    console.log(JSON.stringify(obj, null, 2))
+  },
+  styledObject(obj: Record<string, unknown>) {
+    for (const [key, value] of Object.entries(obj)) {
+      if (value) {
+        console.log(`${key}: ${value}`)
+      }
+    }
+  },
+}
+
 const partnerConnectUpdateResponse = {
   id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
-  name: 'example',
+  isvName: 'Example ISV',
   description: 'Updated description',
   docsUrl: 'https://example.com/docs',
   contactEmail: 'partner@example.com',
@@ -19,16 +34,19 @@ const partnerConnectUpdateResponse = {
 
 describe('partner:connect:update', () => {
   let api: nock.Scope
+  let huxStub: sinon.SinonStub
   const {env} = process
   const id = '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36'
 
   beforeEach(() => {
     process.env = {}
     api = nock('https://api.heroku.com')
+    huxStub = sinon.stub(huxWrapper, 'getHux').resolves(mockHux as never)
   })
 
   afterEach(() => {
     process.env = env
+    huxStub.restore()
     api.done()
     nock.cleanAll()
   })
@@ -41,7 +59,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stdout.output).to.contain('Partner integration created')
     expect(stderr.output).to.equal('')
   })
 
@@ -58,6 +76,21 @@ describe('partner:connect:update', () => {
     expect(stderr.output).to.equal('')
   })
 
+  it('displays styled output for successful update', async () => {
+    api
+      .patch(`/partner/connect/${id}`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(200, partnerConnectUpdateResponse)
+
+    await runCommand(Cmd, [id])
+
+    expect(stdout.output).to.contain('ISV Name: Example ISV')
+    expect(stdout.output).to.contain('Description: Updated description')
+    expect(stdout.output).to.contain('Documentation: https://example.com/docs')
+    expect(stdout.output).to.contain('Contact Email: partner@example.com')
+    expect(stderr.output).to.equal('')
+  })
+
   it('sends optional flags in the request body', async () => {
     const expectedBody = {
       description: 'New description',
@@ -69,7 +102,13 @@ describe('partner:connect:update', () => {
     api
       .patch(`/partner/connect/${id}`, expectedBody)
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
-      .reply(200, partnerConnectUpdateResponse)
+      .reply(200, {
+        ...partnerConnectUpdateResponse,
+        description: 'New description',
+        docsUrl: 'https://example.com/docs',
+        contactEmail: 'partner@example.com',
+        logoFile: '/path/to/logo.png',
+      })
 
     await runCommand(Cmd, [
       id,
@@ -79,7 +118,12 @@ describe('partner:connect:update', () => {
       '--logoFile', '/path/to/logo.png',
     ])
 
-    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stdout.output).to.contain('Partner integration created')
+    expect(stdout.output).to.contain('ISV Name: Example ISV')
+    expect(stdout.output).to.contain('Description: New description')
+    expect(stdout.output).to.contain('Documentation: https://example.com/docs')
+    expect(stdout.output).to.contain('Contact Email: partner@example.com')
+    expect(stdout.output).to.contain('Logo: /path/to/logo.png')
     expect(stderr.output).to.equal('')
   })
 
@@ -104,7 +148,7 @@ describe('partner:connect:update', () => {
       .reply(422, {id: 'invalid_params', message: 'id not a uuid.'})
 
     try {
-      await runCommand(Cmd, ['1234567890', '--description', "New description"])
+      await runCommand(Cmd, ['1234567890', '--description', 'New description'])
       expect.fail('Expected command to throw')
     } catch (error: unknown) {
       expect((error as Error).message).to.contain('id not a uuid.')
@@ -119,7 +163,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain(`Partner Connect integration ${id} updated successfully`)
+    expect(stdout.output).to.contain('Partner integration created')
     expect(stderr.output).to.equal('')
   })
 })
