@@ -83,6 +83,34 @@ describe('partner:connect:update', () => {
     expect(stderr.output).to.equal('')
   })
 
+  it('throws an error when the API returns a 404', async () => {
+    api
+      .patch(`/partner/connect/${id}`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(404, {id: 'not_found', message: 'Couldn\'t find that integration.'})
+
+    try {
+      await runCommand(Cmd, [id])
+      expect.fail('Expected command to throw')
+    } catch (error: any) {
+      expect(error.message).to.contain('Couldn\'t find that integration.')
+    }
+  })
+
+  it('throws an error when the API returns a 422', async () => {
+    api
+      .patch(`/partner/connect/1234567890`)
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .reply(422, {id: 'invalid_params', message: 'id not a uuid.'})
+
+    try {
+      await runCommand(Cmd, ['1234567890', '--description', "New description"])
+      expect.fail('Expected command to throw')
+    } catch (error: any) {
+      expect(error.message).to.contain('id not a uuid.')
+    }
+  })
+
   it('omits unprovided optional flags from the request body', async () => {
     api
       .patch(`/partner/connect/${id}`, {})
