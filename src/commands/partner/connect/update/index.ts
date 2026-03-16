@@ -1,7 +1,7 @@
 import {Args, Flags} from '@oclif/core'
-import {getHux} from '../../../../lib/hux-wrapper'
 
 import BaseCommand from '../../../../lib/base'
+import {getHux} from '../../../../lib/hux-wrapper'
 
 export default class Update extends BaseCommand {
     static args = {
