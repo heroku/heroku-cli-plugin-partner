@@ -34,7 +34,6 @@
     "strip-ansi": "^7.2.0",
     "ts-node": "^10",
     "tsheredoc": "^1.0.1",
-    "tsx": "^4",
     "typescript": "^5"
   },
   "engines": {

@@ -1,6 +1,6 @@
 {
   "require": [
-    "tsx/cjs"
+    "ts-node/register"
   ],
   "watch-extensions": [
     "ts"
