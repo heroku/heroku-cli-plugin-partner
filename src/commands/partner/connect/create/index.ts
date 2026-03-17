@@ -18,26 +18,21 @@ export default class Create extends BaseCommand {
       description: 'The Heroku team that owns this partner integration.',
       required: true,
     }),
-    isvName: Flags.string({
+    'isv-name': Flags.string({
       description: 'Name of the ISV or partner publishing the integration.',
       required: true,
     }),
     description: Flags.string({
-      description: 'Description of the integration (up to 500 characters).',
-      required: true,
+      description: 'Optional description of the integration (up to 500 characters).',
     }),
-    docsUrl: Flags.string({
-      description:
-        'Optional link to partner’s documentation or onboarding guide. Must be a valid URL.',
+    'docs-url': Flags.string({
+      description: 'Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.',
     }),
-    contactEmail: Flags.string({
-      description: 'Contact email for integration support. Must be a valid email address.',
-      required: true,
+    'contact-email': Flags.string({
+      description: 'Optional contact email for integration support. Must be a valid email address.',
     }),
-    logoFile: Flags.string({
-      aliases: ['logo-path'],
-      description:
-        'Optional image URL for the ISV logo. Must be path to a valid image file.',
+    'logo-file': Flags.string({
+      description: 'Optional image path for the ISV logo. Must be a path to a valid image file.',
     }),
   }
 
@@ -45,27 +40,44 @@ export default class Create extends BaseCommand {
     const hux = await getHux()
     const {args, flags} = await this.parse(Create)
 
-    const payload: Partner.CreatePartnerConnect = {
-      slug: args.slug,
-      team: flags.team,
-      description: flags.description,
-      docsUrl: flags.docsUrl,
-      contactEmail: flags.contactEmail,
-      isvName: flags.isvName,
-      logoFile: flags.logoFile,
-    }
+    const isvName = flags['isv-name'] as string
 
-    // TODO: Implement API call to create partner integration
+    let integration: Partner.PartnerConnect
+    try {
+      const endpoint = `/partner/connect`
+      const requestBody = {
+        'contact_email': flags['contact-email'],
+        'description': flags.description,
+        'docs_url': flags['docs-url'],
+        'logo_url': flags['logo-file'],
+        'name': isvName,
+        'slug': args.slug,
+        'team': flags.team,
+      }
+
+      const {body} = await this.apiClient.post<Partner.PartnerConnect>(endpoint, {
+        body: requestBody,
+      })
+      integration = body
+    } catch (error) {
+      const connErr = error as Partner.ConnectionError
+      const message = connErr.body?.message || connErr.message || 'Unknown error'
+      this.error(`Unable to create partner integration.\nReason: ${message}`)
+    }
 
     this.log('✓ Partner integration created')
     this.log('')
 
     hux.styledObject({
-      'ISV Name': payload.isvName,
-      'Description': payload.description || 'none',
-      'Documentation': payload.docsUrl || 'none',
-      'Contact Email': payload.contactEmail || 'none',
-      'Logo': payload.logoFile || 'none',
+      'Slug': integration.slug,
+      'Partner Integration': integration.name,
+      'Team': integration.team,
+      'Description': integration.description || 'none',
+      'Documentation URL': integration.docs_url || 'none',
+      'Contact Email': integration.contact_email || 'none',
+      'Logo URL': integration.logo_url || 'none',
+      'Status': integration.status || 'none',
+      'Created At': integration.created_at || 'none',
     })
   }
 }
