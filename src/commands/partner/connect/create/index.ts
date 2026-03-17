@@ -32,7 +32,7 @@ export default class Create extends BaseCommand {
       description: 'Optional contact email for integration support. Must be a valid email address.',
     }),
     'logo-file': Flags.string({
-      description: 'Optional image URL for the ISV logo. Must be path to a valid image file.',
+      description: 'Optional image path for the ISV logo. Must be a path to a valid image file.',
     }),
   }
 
