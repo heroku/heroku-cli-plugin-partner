@@ -1,6 +1,9 @@
 import {Command as HerokuCommand} from '@heroku-cli/command'
 import {Config, Command as OclifCommand} from '@oclif/core'
+import {createRequire} from 'node:module'
 import {stderr, stdout} from 'stdout-stderr'
+
+const require = createRequire(import.meta.url)
 
 type CmdConstructorParams = [string[], Config]
 export type GenericCmd = new (..._args: CmdConstructorParams) => HerokuCommand | OclifCommand

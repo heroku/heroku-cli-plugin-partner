@@ -1,6 +1,6 @@
 import {Args} from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base'
+import BaseCommand from '../../../../lib/base.js'
 
 export default class Deactivate extends BaseCommand {
   static args = {

@@ -1,44 +1,25 @@
 import {expect} from 'chai'
 import nock from 'nock'
-import * as sinon from 'sinon'
 import {stderr, stdout} from 'stdout-stderr'
 
-import Cmd from '../../../../../src/commands/partner/connect/info'
-import * as huxWrapper from '../../../../../src/lib/hux-wrapper'
-import {partnerConnectInfo} from '../../../../helpers/fixtures'
-import stripAnsi from '../../../../helpers/strip-ansi'
-import {runCommand} from '../../../../run-command'
+import Cmd from '../../../../../src/commands/partner/connect/info/index.js'
+import {partnerConnectInfo} from '../../../../helpers/fixtures.js'
+import stripAnsi from '../../../../helpers/strip-ansi.js'
+import {runCommand} from '../../../../run-command.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
-// Mock hux functions
-const mockHux = {
-  styledJSON(obj: unknown) {
-    console.log(JSON.stringify(obj, null, 2))
-  },
-  styledObject(obj: Record<string, unknown>) {
-    for (const [key, value] of Object.entries(obj)) {
-      if (value) {
-        console.log(`${key}: ${value}`)
-      }
-    }
-  },
-}
-
 describe('partner:connect:info', () => {
   let api: nock.Scope
-  let huxStub: sinon.SinonStub
   const {env} = process
 
   beforeEach(() => {
     process.env = {}
     api = nock('https://api.heroku.com')
-    huxStub = sinon.stub(huxWrapper, 'getHux').resolves(mockHux as never)
   })
 
   afterEach(() => {
     process.env = env
-    huxStub.restore()
     nock.cleanAll()
   })
 
@@ -68,16 +49,26 @@ describe('partner:connect:info', () => {
       await runCommand(Cmd, [id])
 
       const output = stripAnsi(stdout.output)
-      expect(output).to.contain(`Slug: ${partnerConnectInfo.slug}`)
-      expect(output).to.contain(`Partner Integration: ${partnerConnectInfo.name}`)
-      expect(output).to.contain(`Status: ${partnerConnectInfo.status}`)
-      expect(output).to.contain(`Created At: ${partnerConnectInfo.created_at}`)
-      expect(output).to.contain(`Updated At: ${partnerConnectInfo.updated_at}`)
-      expect(output).to.contain(`Description: ${partnerConnectInfo.description}`)
-      expect(output).to.contain(`Documentation URL: ${partnerConnectInfo.docs_url}`)
-      expect(output).to.contain(`Logo URL: ${partnerConnectInfo.logo_url}`)
-      expect(output).to.contain(`Contact Email: ${partnerConnectInfo.contact_email}`)
-      expect(output).to.contain(`Team: ${partnerConnectInfo.team}`)
+      expect(output).to.contain('Slug')
+      expect(output).to.contain(partnerConnectInfo.slug)
+      expect(output).to.contain('Partner Integration')
+      expect(output).to.contain(partnerConnectInfo.name)
+      expect(output).to.contain('Status')
+      expect(output).to.contain(partnerConnectInfo.status)
+      expect(output).to.contain('Created At')
+      expect(output).to.contain(partnerConnectInfo.created_at)
+      expect(output).to.contain('Updated At')
+      expect(output).to.contain(partnerConnectInfo.updated_at)
+      expect(output).to.contain('Description')
+      expect(output).to.contain(partnerConnectInfo.description)
+      expect(output).to.contain('Documentation URL')
+      expect(output).to.contain(partnerConnectInfo.docs_url)
+      expect(output).to.contain('Logo URL')
+      expect(output).to.contain(partnerConnectInfo.logo_url)
+      expect(output).to.contain('Contact Email')
+      expect(output).to.contain(partnerConnectInfo.contact_email)
+      expect(output).to.contain('Team')
+      expect(output).to.contain(partnerConnectInfo.team)
       expect(stderr.output).to.equal('')
     })
   })
