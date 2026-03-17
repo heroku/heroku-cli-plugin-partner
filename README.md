@@ -49,7 +49,7 @@ FLAGS
   --description=<value>    Optional description of the integration (up to 500 characters).
   --docs-url=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.
   --isv-name=<value>       (required) Name of the ISV or partner publishing the integration.
-  --logo-file=<value>      Optional image URL for the ISV logo. Must be path to a valid image file.
+  --logo-file=<value>      Optional image path for the ISV logo. Must be a path to a valid image file.
   --team=<value>           (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
