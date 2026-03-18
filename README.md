@@ -46,11 +46,11 @@ ARGUMENTS
   SLUG  Label used to uniquely identify the ISV
 
 FLAGS
-  --contactEmail=<value>  (required) Contact email for integration support. Must be a valid email address.
+  --contact-email=<value>  (required) Contact email for integration support. Must be a valid email address.
   --description=<value>   (required) Description of the integration (up to 500 characters).
-  --docsUrl=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
-  --isvName=<value>       (required) Name of the ISV or partner publishing the integration.
-  --logoFile=<value>      Optional image for the ISV logo. Must be path to a valid image file.
+  --docs-url=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid URL.
+  --isv-name=<value>       (required) Name of the ISV or partner publishing the integration.
+  --logo-file=<value>      Optional image for the ISV logo. Must be path to a valid image file.
   --team=<value>          (required) The Heroku team that owns this partner integration.
 
 DESCRIPTION
@@ -121,11 +121,11 @@ ARGUMENTS
   ID_OR_SLUG  Partner Connect integration ID or integration name
 
 FLAGS
-  --contactEmail=<value>  Contact email for integration support. Must be a valid email address.
+  --contact-email=<value>  Contact email for integration support. Must be a valid email address.
   --description=<value>   Description of the integration (up to 500 characters).
-  --docsUrl=<value>       Link to partner’s documentation or onboarding guide. Must be a valid URL. URL
+  --docs-url=<value>       Link to partner’s documentation or onboarding guide. Must be a valid URL. URL
   --json                  Output in JSON format
-  --logoFile=<value>      Image for the ISV logo. Must be path to a valid image file.
+  --logo-file=<value>      Image for the ISV logo. Must be path to a valid image file.
 
 DESCRIPTION
   Update Partner Connect integration
