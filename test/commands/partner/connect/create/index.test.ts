@@ -1,44 +1,25 @@
 import {expect} from 'chai'
 import nock from 'nock'
-import * as sinon from 'sinon'
 import {stderr, stdout} from 'stdout-stderr'
 
-import Cmd from '../../../../../src/commands/partner/connect/create'
-import * as huxWrapper from '../../../../../src/lib/hux-wrapper'
-import {partnerConnectInfo} from '../../../../helpers/fixtures'
-import stripAnsi from '../../../../helpers/strip-ansi'
-import {runCommand} from '../../../../run-command'
+import Cmd from '../../../../../src/commands/partner/connect/create/index.js'
+import {partnerConnectInfo} from '../../../../helpers/fixtures.js'
+import stripAnsi from '../../../../helpers/strip-ansi.js'
+import {runCommand} from '../../../../run-command.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
-// Mock hux functions
-const mockHux = {
-  styledJSON(obj: unknown) {
-    console.log(JSON.stringify(obj, null, 2))
-  },
-  styledObject(obj: Record<string, unknown>) {
-    for (const [key, value] of Object.entries(obj)) {
-      if (value) {
-        console.log(`${key}: ${value}`)
-      }
-    }
-  },
-}
-
 describe('partner:connect:create', () => {
   let api: nock.Scope
-  let huxStub: sinon.SinonStub
   const {env} = process
 
   beforeEach(() => {
     process.env = {}
     api = nock('https://api.heroku.com')
-    huxStub = sinon.stub(huxWrapper, 'getHux').resolves(mockHux as never)
   })
 
   afterEach(() => {
     process.env = env
-    huxStub.restore()
     nock.cleanAll()
   })
 
@@ -75,8 +56,10 @@ describe('partner:connect:create', () => {
 
       const output = stripAnsi(stdout.output)
       expect(output).to.contain('Partner integration created')
-      expect(output).to.contain(`Slug: ${partnerConnectInfo.slug}`)
-      expect(output).to.contain(`Partner Integration: ${partnerConnectInfo.name}`)
+      expect(output).to.contain('Slug')
+      expect(output).to.contain(partnerConnectInfo.slug)
+      expect(output).to.contain('Partner Integration')
+      expect(output).to.contain(partnerConnectInfo.name)
       expect(stderr.output).to.equal('')
     })
 

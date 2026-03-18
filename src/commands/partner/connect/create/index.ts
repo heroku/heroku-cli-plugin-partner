@@ -1,8 +1,8 @@
+import {hux} from '@heroku/heroku-cli-util'
 import {Args, Flags} from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base'
-import {getHux} from '../../../../lib/hux-wrapper'
-import * as Partner from '../../../../lib/partner/types'
+import BaseCommand from '../../../../lib/base.js'
+import * as Partner from '../../../../lib/partner/types.js'
 
 export default class Create extends BaseCommand {
   static args = {
@@ -37,7 +37,6 @@ export default class Create extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const hux = await getHux()
     const {args, flags} = await this.parse(Create)
 
     const isvName = flags['isv-name'] as string
