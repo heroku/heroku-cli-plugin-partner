@@ -12,6 +12,7 @@ CLI for Heroku Partner/ISV Integrations
 <!-- toc -->
 * [Usage](#usage)
 * [Commands](#commands)
+* [Development](#development)
 <!-- tocstop -->
 # Usage
 
@@ -38,8 +39,8 @@ Creates a new partner integration record for Heroku Connect and stores ISV metad
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isvName <value> --description <value> --contactEmail <value>
-    [--docsUrl <value>] [--logoFile <value>]
+  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--description <value>] [--docs-url <value>]
+    [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  Label used to uniquely identify the ISV
@@ -135,3 +136,22 @@ EXAMPLES
 
 _See code: [src/commands/partner/connect/update/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/update/index.ts)_
 <!-- commandsstop -->
+
+# Development
+
+## Setup
+
+```
+mise install
+yarn
+```
+
+## Generate the docs
+```
+yarn build
+```
+
+## Run eslint
+```
+yarn lint
+```
