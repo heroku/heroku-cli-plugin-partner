@@ -1,53 +1,38 @@
 import {expect} from 'chai'
 import nock from 'nock'
-import * as sinon from 'sinon'
 import {stderr, stdout} from 'stdout-stderr'
 
-import Cmd from '../../../../../src/commands/partner/connect/update'
-import * as huxWrapper from '../../../../../src/lib/hux-wrapper'
-import {runCommand} from '../../../../run-command'
+import Cmd from '../../../../../src/commands/partner/connect/update/index.js'
+import stripAnsi from '../../../../helpers/strip-ansi.js'
+import {runCommand} from '../../../../run-command.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
-const mockHux = {
-  styledJSON(obj: unknown) {
-    console.log(JSON.stringify(obj, null, 2))
-  },
-  styledObject(obj: Record<string, unknown>) {
-    for (const [key, value] of Object.entries(obj)) {
-      if (value) {
-        console.log(`${key}: ${value}`)
-      }
-    }
-  },
-}
-
 const partnerConnectUpdateResponse = {
   id: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
-  isvName: 'Example ISV',
+  name: 'Example ISV',
+  slug: 'example-isv',
   description: 'Updated description',
-  docsUrl: 'https://example.com/docs',
-  contactEmail: 'partner@example.com',
-  logoFile: '/path/to/logo.png',
-  updatedAt: '2021-06-01T00:00:00Z',
+  docs_url: 'https://example.com/docs',
+  contact_email: 'partner@example.com',
+  logo_url: '/path/to/logo.png',
+  status: 'active',
+  team: 'acme-team',
+  updated_at: '2021-06-01T00:00:00Z',
 }
 
 describe('partner:connect:update', () => {
   let api: nock.Scope
-  let huxStub: sinon.SinonStub
   const {env} = process
   const id = '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36'
 
   beforeEach(() => {
     process.env = {}
     api = nock('https://api.heroku.com')
-    huxStub = sinon.stub(huxWrapper, 'getHux').resolves(mockHux as never)
   })
 
   afterEach(() => {
     process.env = env
-    huxStub.restore()
-    api.done()
     nock.cleanAll()
   })
 
@@ -84,19 +69,30 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('ISV Name: Example ISV')
-    expect(stdout.output).to.contain('Description: Updated description')
-    expect(stdout.output).to.contain('Documentation: https://example.com/docs')
-    expect(stdout.output).to.contain('Contact Email: partner@example.com')
+    const output = stripAnsi(stdout.output)
+    expect(output).to.contain('Slug')
+    expect(output).to.contain(partnerConnectUpdateResponse.slug)
+    expect(output).to.contain('Partner Integration')
+    expect(output).to.contain(partnerConnectUpdateResponse.name)
+    expect(output).to.contain('Description')
+    expect(output).to.contain(partnerConnectUpdateResponse.description)
+    expect(output).to.contain('Documentation URL')
+    expect(output).to.contain(partnerConnectUpdateResponse.docs_url)
+    expect(output).to.contain('Contact Email')
+    expect(output).to.contain(partnerConnectUpdateResponse.contact_email)
+    expect(output).to.contain('Status')
+    expect(output).to.contain(partnerConnectUpdateResponse.status)
+    expect(output).to.contain('Updated At')
+    expect(output).to.contain(partnerConnectUpdateResponse.updated_at)
     expect(stderr.output).to.equal('')
   })
 
   it('sends optional flags in the request body', async () => {
     const expectedBody = {
       description: 'New description',
-      docsUrl: 'https://example.com/docs',
-      contactEmail: 'partner@example.com',
-      logoFile: '/path/to/logo.png',
+      docs_url: 'https://example.com/docs',
+      contact_email: 'partner@example.com',
+      logo_url: '/path/to/logo.png',
     }
 
     api
@@ -104,10 +100,7 @@ describe('partner:connect:update', () => {
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
       .reply(200, {
         ...partnerConnectUpdateResponse,
-        description: 'New description',
-        docsUrl: 'https://example.com/docs',
-        contactEmail: 'partner@example.com',
-        logoFile: '/path/to/logo.png',
+        ...expectedBody,
       })
 
     await runCommand(Cmd, [
@@ -118,12 +111,16 @@ describe('partner:connect:update', () => {
       '--logo-file', '/path/to/logo.png',
     ])
 
-    expect(stdout.output).to.contain('Partner integration updated')
-    expect(stdout.output).to.contain('ISV Name: Example ISV')
-    expect(stdout.output).to.contain('Description: New description')
-    expect(stdout.output).to.contain('Documentation: https://example.com/docs')
-    expect(stdout.output).to.contain('Contact Email: partner@example.com')
-    expect(stdout.output).to.contain('Logo: /path/to/logo.png')
+    const output = stripAnsi(stdout.output)
+    expect(output).to.contain('Partner integration updated')
+    expect(output).to.contain('Description')
+    expect(output).to.contain('New description')
+    expect(output).to.contain('Documentation URL')
+    expect(output).to.contain('https://example.com/docs')
+    expect(output).to.contain('Contact Email')
+    expect(output).to.contain('partner@example.com')
+    expect(output).to.contain('Logo URL')
+    expect(output).to.contain('/path/to/logo.png')
     expect(stderr.output).to.equal('')
   })
 
