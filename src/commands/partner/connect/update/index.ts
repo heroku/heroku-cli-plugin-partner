@@ -38,7 +38,7 @@ export default class Update extends BaseCommand {
             return
         }
 
-        this.log('✓ Partner integration created')
+        this.log('✓ Partner integration updated')
         this.log('')
 
         const hux = await getHux()

@@ -59,7 +59,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration created')
+    expect(stdout.output).to.contain('Partner integration updated')
     expect(stderr.output).to.equal('')
   })
 
@@ -118,7 +118,7 @@ describe('partner:connect:update', () => {
       '--logo-file', '/path/to/logo.png',
     ])
 
-    expect(stdout.output).to.contain('Partner integration created')
+    expect(stdout.output).to.contain('Partner integration updated')
     expect(stdout.output).to.contain('ISV Name: Example ISV')
     expect(stdout.output).to.contain('Description: New description')
     expect(stdout.output).to.contain('Documentation: https://example.com/docs')
@@ -163,7 +163,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration created')
+    expect(stdout.output).to.contain('Partner integration updated')
     expect(stderr.output).to.equal('')
   })
 })
