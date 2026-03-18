@@ -113,9 +113,9 @@ describe('partner:connect:update', () => {
     await runCommand(Cmd, [
       id,
       '--description', 'New description',
-      '--docsUrl', 'https://example.com/docs',
-      '--contactEmail', 'partner@example.com',
-      '--logoFile', '/path/to/logo.png',
+      '--docs-url', 'https://example.com/docs',
+      '--contact-email', 'partner@example.com',
+      '--logo-file', '/path/to/logo.png',
     ])
 
     expect(stdout.output).to.contain('Partner integration created')

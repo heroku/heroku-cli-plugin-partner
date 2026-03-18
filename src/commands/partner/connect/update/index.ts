@@ -15,9 +15,9 @@ export default class Update extends BaseCommand {
     static flags = {
         json: Flags.boolean({description: 'Output in JSON format'}),
         description: Flags.string({description: 'Description of the integration (up to 500 characters).', required: false}),
-        docsUrl: Flags.string({description: 'Link to partner’s documentation or onboarding guide. Must be a valid URL. URL', required: false}),
-        contactEmail: Flags.string({description: 'Contact email for integration support. Must be a valid email address.', required: false}),
-        logoFile: Flags.string({description: 'Image for the ISV logo. Must be path to a valid image file.', required: false}),
+        'docs-url': Flags.string({description: 'Link to partner’s documentation or onboarding guide. Must be a valid URL. URL', required: false}),
+        'contact-email': Flags.string({description: 'Contact email for integration support. Must be a valid email address.', required: false}),
+        'logo-file': Flags.string({description: 'Image for the ISV logo. Must be path to a valid image file.', required: false}),
     }
 
     async run(): Promise<void> {
@@ -25,9 +25,9 @@ export default class Update extends BaseCommand {
 
         const updateBody: Record<string, string> = {}
         if (flags.description) updateBody.description = flags.description
-        if (flags.docsUrl) updateBody.docsUrl = flags.docsUrl
-        if (flags.contactEmail) updateBody.contactEmail = flags.contactEmail
-        if (flags.logoFile) updateBody.logoFile = flags.logoFile
+        if (flags['docs-url']) updateBody.docsUrl = flags['docs-url']
+        if (flags['contact-email']) updateBody.contactEmail = flags['contact-email']
+        if (flags['logo-file']) updateBody.logoFile = flags['logo-file']
 
         const {body} = await this.apiClient.patch<Record<string, unknown>>(`/partner/connect/${args.id_or_slug}`, {
             body: updateBody,
