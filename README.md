@@ -38,8 +38,8 @@ Creates a new partner integration record for Heroku Connect and stores ISV metad
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--description <value>] [--docs-url <value>]
-    [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--prompt] [--description <value>] [--docs-url
+    <value>] [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  Label used to uniquely identify the ISV
@@ -51,6 +51,9 @@ FLAGS
   --isv-name=<value>       (required) Name of the ISV or partner publishing the integration.
   --logo-file=<value>      Optional image path for the ISV logo. Must be a path to a valid image file.
   --team=<value>           (required) The Heroku team that owns this partner integration.
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and
@@ -68,10 +71,13 @@ Deactivates a Heroku Connect partner integration.
 
 ```
 USAGE
-  $ heroku partner:connect:deactivate ID_OR_SLUG
+  $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt]
 
 ARGUMENTS
   ID_OR_SLUG  Partner Connect integration ID or integration name
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   Deactivates a Heroku Connect partner integration.
@@ -90,13 +96,16 @@ display all metadata fields for a Heroku Connect partner integration
 
 ```
 USAGE
-  $ heroku partner:connect:info ID_OR_SLUG [--json]
+  $ heroku partner:connect:info ID_OR_SLUG [--prompt] [--json]
 
 ARGUMENTS
   ID_OR_SLUG  Partner Connect integration ID or integration name
 
 FLAGS
   --json  output in JSON format
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   display all metadata fields for a Heroku Connect partner integration
