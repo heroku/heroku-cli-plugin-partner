@@ -114,8 +114,8 @@ Update Partner Connect integration
 
 ```
 USAGE
-  $ heroku partner:connect:update ID_OR_SLUG [--json] [--description <value>] [--docsUrl <value>] [--contactEmail <value>]
-    [--logoFile <value>]
+  $ heroku partner:connect:update ID_OR_SLUG [--json] [--description <value>] [--docs-url <value>] [--contact-email <value>]
+    [--logo-file <value>]
 
 ARGUMENTS
   ID_OR_SLUG  Partner Connect integration ID or integration name
@@ -123,9 +123,9 @@ ARGUMENTS
 FLAGS
   --contact-email=<value>  Contact email for integration support. Must be a valid email address.
   --description=<value>    Description of the integration (up to 500 characters).
-  --docs-url=<value>       Link to partner’s documentation or onboarding guide. Must be a valid URL. URL
+  --docs-url=<value>       Link to partner documentation or onboarding guide. Must be a valid URL.
   --json                   Output in JSON format
-  --logo-file=<value>      Image for the ISV logo. Must be path to a valid image file.
+  --logo-file=<value>      Image path for the ISV logo. Must be a path to a valid image file.
 
 DESCRIPTION
   Update Partner Connect integration
