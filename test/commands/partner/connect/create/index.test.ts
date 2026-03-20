@@ -25,10 +25,15 @@ describe('partner:connect:create', () => {
   afterEach(() => {
     process.env = env
     nock.cleanAll()
-    // Clean up temp files
+    // Clean up temp files and directories
     for (const file of tempFiles) {
       try {
-        if (fs.existsSync(file)) fs.unlinkSync(file)
+        if (fs.existsSync(file)) {
+          fs.unlinkSync(file)
+          // Remove parent directory
+          const dir = path.dirname(file)
+          if (fs.existsSync(dir)) fs.rmdirSync(dir)
+        }
       } catch {}
     }
 
@@ -36,7 +41,8 @@ describe('partner:connect:create', () => {
   })
 
   function createTempFile(name: string, size: number): string {
-    const tempDir = os.tmpdir()
+    const tmpDir = os.tmpdir() || process.env.TEMP || process.env.TMP || process.cwd()
+    const tempDir = fs.mkdtempSync(path.join(tmpDir, 'partner-test-'))
     const filePath = path.join(tempDir, name)
     fs.writeFileSync(filePath, Buffer.alloc(size))
     tempFiles.push(filePath)
