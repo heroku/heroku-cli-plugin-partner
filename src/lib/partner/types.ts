@@ -32,6 +32,25 @@ type createPartnerConnect = {
   team: string
 }
 
+interface deactivateResponse {
+  id?: string
+  isv_guid: string
+  isv_status: string
+  message: string
+  responses: Array<{
+    addon_guid: string
+    error?: string
+    message?: string
+    status: number
+  }>
+  summary: {
+    failed: number
+    succeeded: number
+    total: number
+  }
+}
+
 export type PartnerConnect = partnerConnect
 export type ConnectionError = connectionError
 export type CreatePartnerConnect = createPartnerConnect
+export type DeactivateResponse = deactivateResponse

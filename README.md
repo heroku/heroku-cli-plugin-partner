@@ -29,7 +29,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`heroku partner:connect:create SLUG`](#heroku-partnerconnectcreate-slug)
-* [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
+* [`heroku partner:connect:deactivate SLUG`](#heroku-partnerconnectdeactivate-slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
 
 ## `heroku partner:connect:create SLUG`
@@ -65,16 +65,19 @@ EXAMPLES
 
 _See code: [src/commands/partner/connect/create/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/create/index.ts)_
 
-## `heroku partner:connect:deactivate ID_OR_SLUG`
+## `heroku partner:connect:deactivate SLUG`
 
 Deactivates a Heroku Connect partner integration.
 
 ```
 USAGE
-  $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt]
+  $ heroku partner:connect:deactivate SLUG --team <value> [--prompt]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or integration name
+  SLUG  Partner Connect integration slug
+
+FLAGS
+  --team=<value>  (required) The Heroku team that owns this partner integration.
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
@@ -85,7 +88,7 @@ DESCRIPTION
   It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
 
 EXAMPLES
-  $ heroku partner:connect:deactivate acme-integrations
+  $ heroku partner:connect:deactivate acme-integrations --team acme-team
 ```
 
 _See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_

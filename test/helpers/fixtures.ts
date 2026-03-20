@@ -18,3 +18,15 @@ export const partnerConnectInfo = {
   team: 'acme-team',
   updated_at: '2021-01-01T00:00:00Z',
 }
+
+export const deactivateResponse = {
+  isv_guid: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
+  isv_status: 'inactive',
+  message: 'Integration deactivated',
+  summary: {
+    total: 1,
+    succeeded: 1,
+    failed: 0,
+  },
+  responses: [],
+}
