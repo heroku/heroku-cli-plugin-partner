@@ -10,7 +10,7 @@ export default class Update extends BaseCommand {
     // eslint-disable-next-line camelcase
     id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
-  static description = 'Update Partner Connect integration'
+  static description = 'update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
   static examples = [
     '$ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"',
   ]
