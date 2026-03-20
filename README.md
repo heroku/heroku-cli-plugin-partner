@@ -67,14 +67,14 @@ _See code: [src/commands/partner/connect/create/index.ts](https://github.com/her
 
 ## `heroku partner:connect:deactivate ID_OR_SLUG`
 
-Deactivates a Heroku Connect partner integration.
+deactivate a Heroku Connect partner integration
 
 ```
 USAGE
   $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt] [--confirm <value>]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or integration name
+  ID_OR_SLUG  ID or name of the partner integration
 
 FLAGS
   --confirm=<value>  Confirms the deactivation. Must match the integration ID or slug.
@@ -83,9 +83,9 @@ GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  Deactivates a Heroku Connect partner integration.
-  Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
-  It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
+  deactivate a Heroku Connect partner integration
+  Deactivation prevents associating new Heroku Connect add-ons with the partner integration.
+  Deactivation also destroys any existing Heroku Connect add-ons associated with the partner integration.
 
 EXAMPLES
   $ heroku partner:connect:deactivate acme-integrations

@@ -7,11 +7,11 @@ import * as Partner from '../../../../lib/partner/types.js'
 export default class Deactivate extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
-    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
-  static description = `Deactivates a Heroku Connect partner integration.
-Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
-It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.`
+  static description = `deactivate a Heroku Connect partner integration
+  Deactivation prevents associating new Heroku Connect add-ons with the partner integration.
+  Deactivation also destroys any existing Heroku Connect add-ons associated with the partner integration.`
   static examples = [
     '$ heroku partner:connect:deactivate acme-integrations',
   ]
