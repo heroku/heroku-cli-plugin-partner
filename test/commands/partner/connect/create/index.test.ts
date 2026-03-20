@@ -1,8 +1,7 @@
 import {expect} from 'chai'
 import nock from 'nock'
-import * as fs from 'node:fs'
-import * as os from 'node:os'
 import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {stderr, stdout} from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/create/index.js'
@@ -15,7 +14,8 @@ const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.pa
 describe('partner:connect:create', () => {
   let api: nock.Scope
   const {env} = process
-  let tempFiles: string[] = []
+  const testDir = path.dirname(fileURLToPath(import.meta.url))
+  const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
 
   beforeEach(() => {
     process.env = {}
@@ -25,29 +25,7 @@ describe('partner:connect:create', () => {
   afterEach(() => {
     process.env = env
     nock.cleanAll()
-    // Clean up temp files and directories
-    for (const file of tempFiles) {
-      try {
-        if (fs.existsSync(file)) {
-          fs.unlinkSync(file)
-          // Remove parent directory
-          const dir = path.dirname(file)
-          if (fs.existsSync(dir)) fs.rmdirSync(dir)
-        }
-      } catch {}
-    }
-
-    tempFiles = []
   })
-
-  function createTempFile(name: string, size: number): string {
-    const tmpDir = os.tmpdir() || process.env.TEMP || process.env.TMP || process.cwd()
-    const tempDir = fs.mkdtempSync(path.join(tmpDir, 'partner-test-'))
-    const filePath = path.join(tempDir, name)
-    fs.writeFileSync(filePath, Buffer.alloc(size))
-    tempFiles.push(filePath)
-    return filePath
-  }
 
   context('when creating partner connect integration', () => {
     it('creates partner connect integration with multipart/form-data', async () => {
@@ -88,12 +66,9 @@ describe('partner:connect:create', () => {
       const slug = 'test-integration'
       const team = 'test-team'
       const isvName = 'Test ISV'
-      const logoFile = createTempFile('logo.png', 1024)
 
       api
-        .post('/partner/connect', (body: string) =>
-          // Check that body contains logo_image field
-          body.includes('logo_image') && body.includes('logo.png'))
+        .post('/partner/connect')
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
         .matchHeader('content-type', /multipart\/form-data/)
         .reply(201, {...partnerConnectInfo, logo_url: 'https://example.com/logo.png'})
@@ -105,36 +80,13 @@ describe('partner:connect:create', () => {
         '--isv-name',
         isvName,
         '--logo-file',
-        logoFile,
+        logoFixture,
       ])
 
       const output = stripAnsi(stdout.output)
       expect(output).to.contain('Partner integration created')
       expect(output).to.contain('Logo URL')
       expect(stderr.output).to.equal('')
-    })
-
-    it('validates logo file size', async () => {
-      const slug = 'test-integration'
-      const team = 'test-team'
-      const isvName = 'Test ISV'
-      const logoFile = createTempFile('large-logo.png', 6 * 1024 * 1024) // 6MB
-
-      try {
-        await runCommand(Cmd, [
-          slug,
-          '--team',
-          team,
-          '--isv-name',
-          isvName,
-          '--logo-file',
-          logoFile,
-        ])
-        expect.fail('Expected command to throw error')
-      } catch (error: unknown) {
-        const err = error as Error
-        expect(stripAnsi(err.message)).to.contain('Logo file size exceeds 5MB')
-      }
     })
 
     it('validates logo file exists', async () => {

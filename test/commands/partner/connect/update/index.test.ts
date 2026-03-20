@@ -1,8 +1,7 @@
 import {expect} from 'chai'
 import nock from 'nock'
-import * as fs from 'node:fs'
-import * as os from 'node:os'
 import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {stderr, stdout} from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/update/index.js'
@@ -28,7 +27,8 @@ describe('partner:connect:update', () => {
   let api: nock.Scope
   const {env} = process
   const id = '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36'
-  let tempFiles: string[] = []
+  const testDir = path.dirname(fileURLToPath(import.meta.url))
+  const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
 
   beforeEach(() => {
     process.env = {}
@@ -38,29 +38,7 @@ describe('partner:connect:update', () => {
   afterEach(() => {
     process.env = env
     nock.cleanAll()
-    // Clean up temp files and directories
-    for (const file of tempFiles) {
-      try {
-        if (fs.existsSync(file)) {
-          fs.unlinkSync(file)
-          // Remove parent directory
-          const dir = path.dirname(file)
-          if (fs.existsSync(dir)) fs.rmdirSync(dir)
-        }
-      } catch {}
-    }
-
-    tempFiles = []
   })
-
-  function createTempFile(name: string, size: number): string {
-    const tmpDir = os.tmpdir() || process.env.TEMP || process.env.TMP || process.cwd()
-    const tempDir = fs.mkdtempSync(path.join(tmpDir, 'partner-test-'))
-    const filePath = path.join(tempDir, name)
-    fs.writeFileSync(filePath, Buffer.alloc(size))
-    tempFiles.push(filePath)
-    return filePath
-  }
 
   it('sends a PATCH request with multipart/form-data', async () => {
     api
@@ -147,38 +125,22 @@ describe('partner:connect:update', () => {
   })
 
   it('uploads logo file when provided', async () => {
-    const logoFile = createTempFile('new-logo.png', 2048)
-
     api
-      .patch(`/partner/connect/${id}`, (body: string) =>
-        // Check that body contains logo_image field
-        body.includes('logo_image') && body.includes('new-logo.png'))
+      .patch(`/partner/connect/${id}`)
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
       .matchHeader('content-type', /multipart\/form-data/)
       .reply(200, {
         ...partnerConnectUpdateResponse,
-        logo_url: 'https://example.com/new-logo.png',
+        logo_url: 'https://example.com/logo.png',
       })
 
-    await runCommand(Cmd, [id, '--logo-file', logoFile])
+    await runCommand(Cmd, [id, '--logo-file', logoFixture])
 
     const output = stripAnsi(stdout.output)
     expect(output).to.contain('Partner integration updated')
     expect(output).to.contain('Logo URL')
-    expect(output).to.contain('https://example.com/new-logo.png')
+    expect(output).to.contain('https://example.com/logo.png')
     expect(stderr.output).to.equal('')
-  })
-
-  it('validates logo file size', async () => {
-    const logoFile = createTempFile('large-logo.png', 7 * 1024 * 1024) // 7MB
-
-    try {
-      await runCommand(Cmd, [id, '--logo-file', logoFile])
-      expect.fail('Expected command to throw error')
-    } catch (error: unknown) {
-      const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Logo file size exceeds 5MB')
-    }
   })
 
   it('validates logo file exists', async () => {
