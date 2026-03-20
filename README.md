@@ -130,11 +130,11 @@ ARGUMENTS
   ID_OR_SLUG  ID or name of the partner integration
 
 FLAGS
-  --contact-email=<value>  Contact email for integration support. Must be a valid email address.
-  --description=<value>    Description of the integration (up to 500 characters).
-  --docs-url=<value>       Link to partner documentation or onboarding guide. Must be a valid URL.
+  --contact-email=<value>  valid email for integration support
+  --description=<value>    description of the integration (up to 500 characters)
+  --docs-url=<value>       link to partner’s documentation or onboarding guide
   --json                   Output in JSON format
-  --logo-file=<value>      Image path for the ISV logo. Must be a path to a valid image file.
+  --logo-file=<value>      image path for the ISV logo
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags

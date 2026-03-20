@@ -17,16 +17,16 @@ export default class Update extends BaseCommand {
   static flags = {
     json: Flags.boolean({description: 'Output in JSON format'}),
     description: Flags.string({
-      description: 'Description of the integration (up to 500 characters).',
+      description: 'description of the integration (up to 500 characters)',
     }),
     'docs-url': Flags.string({
-      description: 'Link to partner documentation or onboarding guide. Must be a valid URL.',
+      description: 'link to partner’s documentation or onboarding guide',
     }),
     'contact-email': Flags.string({
-      description: 'Contact email for integration support. Must be a valid email address.',
+      description: 'valid email for integration support',
     }),
     'logo-file': Flags.string({
-      description: 'Image path for the ISV logo. Must be a path to a valid image file.',
+      description: 'image path for the ISV logo',
     }),
   }
 
