@@ -6,56 +6,60 @@ import * as Partner from '../../../../lib/partner/types.js'
 
 export default class Deactivate extends BaseCommand {
   static args = {
-
-    slug: Args.string({description: 'Partner Connect integration slug', required: true}),
+    // eslint-disable-next-line camelcase
+    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
   static description = `Deactivates a Heroku Connect partner integration.
 Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
 It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.`
   static examples = [
-    '$ heroku partner:connect:deactivate acme-integrations --team acme-team',
+    '$ heroku partner:connect:deactivate acme-integrations',
   ]
   static flags = {
-    team: Flags.string({
-      description: 'The Heroku team that owns this partner integration.',
-      required: true,
+    confirm: Flags.string({
+      description: 'Confirms the deactivation. Must match the integration ID or slug.',
     }),
   }
     
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Deactivate)
-    const {slug} = args
-    const team = flags.team as string
+    const {id_or_slug: idOrSlug} = args
 
-    this.log(`Deactivating integration ${slug}...`)
+    await hux.confirmCommand({
+      comparison: idOrSlug,
+      confirmation: flags.confirm,
+      warningMessage: `This will deactivate the partner integration ${idOrSlug} and destroy all associated Heroku Connect add-ons.`,
+      abortedMessage: 'Deactivation cancelled.',
+    })
+
+    this.log(`Deactivating integration ${idOrSlug}...`)
 
     try {
-      const endpoint = `/partner/connect/${slug}`
+      const endpoint = `/partner/connect/${idOrSlug}`
       const {body} = await this.apiClient.delete<Partner.DeactivateResponse>(endpoint)
 
       if (body.id === 'inactive') {
-        this.log(`Integration already deactivated for ${team}`)
+        this.log(`Integration already deactivated for ${idOrSlug}`)
         return
       }
 
       if (body.summary && body.summary.failed > 0) {
-        this.error(`Failed to deactivate partner integration for ${team}. Reason: ${body.message}`)
+        this.error(`Failed to deactivate partner integration for ${idOrSlug}. Reason: ${body.message}`)
       }
 
       this.log('✓ Partner integration deactivated')
       hux.styledObject({
-        'Team': team,
-        'Integration': slug,
+        'Integration': idOrSlug,
         'Status': body.isv_status,
       })
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       if (connErr.body?.id === 'record_not_found') {
-        this.error(`No partner integration found for team ${team}`)
+        this.error(`No partner integration found for ${idOrSlug}`)
       }
 
       const message = connErr.body?.message || connErr.message || 'Unknown error'
-      this.error(`Failed to deactivate partner integration for ${team}.\nReason: ${message}`)
+      this.error(`Failed to deactivate partner integration for ${idOrSlug}.\nReason: ${message}`)
     }
   }
 }

@@ -25,22 +25,19 @@ describe('partner:connect:deactivate', () => {
     
     context('when deactivating partner connect integration', () => {
         it('deactivates partner connect integration with correct accept header', async () => {
-            const slug = 'test-integration'
-            const team = 'test-team'
+            const idOrSlug = 'test-integration'
 
             api 
-                .delete(`/partner/connect/${slug}`)
+                .delete(`/partner/connect/${idOrSlug}`)
                 .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
                 .reply(202, deactivateResponse)
 
-            await runCommand(Cmd, [slug, '--team', team])
+            await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
 
             const output = stripAnsi(stdout.output)
             expect(output).to.contain('Partner integration deactivated')
-            expect(output).to.contain('Team')
-            expect(output).to.contain(team)
             expect(output).to.contain('Integration')
-            expect(output).to.contain(slug)
+            expect(output).to.contain(idOrSlug)
             expect(output).to.contain('Status')
             expect(output).to.contain(deactivateResponse.isv_status)
             expect(stderr.output).to.equal('')
@@ -48,44 +45,41 @@ describe('partner:connect:deactivate', () => {
 
     
     it('shows message when integration is already deactivated', async () => {
-        const slug = 'test-integration'
-        const team = 'test-team'
+        const idOrSlug = 'test-integration'
 
         api
-            .delete(`/partner/connect/${slug}`)
+            .delete(`/partner/connect/${idOrSlug}`)
             .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
             .reply(200, {id: 'inactive', message: 'ISV integration is already inactive'})
         
-        await runCommand(Cmd, [slug, '--team', team])
+        await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
 
         const output = stripAnsi(stdout.output)
-        expect(output).to.contain(`Integration already deactivated for ${team}`)
-        expect(output).to.contain(team)
+        expect(output).to.contain(`Integration already deactivated for ${idOrSlug}`)
+        expect(output).to.contain(idOrSlug)
         expect(stderr.output).to.equal('')
     })
 
     it('shows error when integration is not found', async () => {
-        const slug = 'test-integration'
-        const team = 'test-team'
+        const idOrSlug = 'test-integration'
         api
-          .delete(`/partner/connect/${slug}`)
+          .delete(`/partner/connect/${idOrSlug}`)
           .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
           .reply(404, {id: 'record_not_found', message: 'Record not found'})
         try {
-          await runCommand(Cmd, [slug, '--team', team])
+          await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
           expect.fail('Expected command to throw error')
         } catch (error: unknown) {
           const err = error as Error
-          expect(stripAnsi(err.message)).to.contain(`No partner integration found for team ${team}`)
+          expect(stripAnsi(err.message)).to.contain(`No partner integration found for ${idOrSlug}`)
         }
       })
 
 
       it('shows error when some add-on deletions fail', async () => {
-        const slug = 'nonexistent-integration'
-        const team = 'test-team'
+        const idOrSlug = 'nonexistent-integration'
         api
-          .delete(`/partner/connect/${slug}`)
+          .delete(`/partner/connect/${idOrSlug}`)
           .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
           .reply(207, {
             isv_guid: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
@@ -95,11 +89,11 @@ describe('partner:connect:deactivate', () => {
             responses: [],
           })
         try {
-          await runCommand(Cmd, [slug, '--team', team])
+          await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
           expect.fail('Expected command to throw error')
         } catch (error: unknown) {
           const err = error as Error
-          expect(stripAnsi(err.message)).to.contain(`Failed to deactivate partner integration for ${team}`)
+          expect(stripAnsi(err.message)).to.contain(`Failed to deactivate partner integration for ${idOrSlug}`)
         }
       })
     })
