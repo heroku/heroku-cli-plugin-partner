@@ -3,6 +3,7 @@ import {Args, Flags} from '@oclif/core'
 
 import BaseCommand from '../../../../lib/base.js'
 import * as Partner from '../../../../lib/partner/types.js'
+import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/upload.js'
 
 export default class Create extends BaseCommand {
   static args = {
@@ -40,24 +41,34 @@ export default class Create extends BaseCommand {
     const {args, flags} = await this.parse(Create)
 
     const isvName = flags['isv-name'] as string
+    const logoFile = flags['logo-file']
+
+    // Validate logo file if provided
+    if (logoFile) {
+      try {
+        validateLogoFile(logoFile)
+      } catch (error: unknown) {
+        this.error((error as Error).message)
+      }
+    }
 
     let integration: Partner.PartnerConnect
     try {
-      const endpoint = `/partner/connect`
-      const requestBody = {
-        'contact_email': flags['contact-email'],
-        'description': flags.description,
-        'docs_url': flags['docs-url'],
-        'logo_url': flags['logo-file'],
-        'name': isvName,
-        'slug': args.slug,
-        'team': flags.team,
-      }
-
-      const {body} = await this.apiClient.post<Partner.PartnerConnect>(endpoint, {
-        body: requestBody,
+      integration = await uploadPartnerData<Partner.PartnerConnect>({
+        auth: this.heroku.auth,
+        endpoint: '/partner/connect',
+        fields: {
+          name: isvName,
+          slug: args.slug,
+          team: flags.team,
+          // eslint-disable-next-line camelcase
+          contact_email: flags['contact-email'],
+          description: flags.description,
+          // eslint-disable-next-line camelcase
+          docs_url: flags['docs-url'],
+        },
+        logoFile,
       })
-      integration = body
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       const message = connErr.body?.message || connErr.message || 'Unknown error'
