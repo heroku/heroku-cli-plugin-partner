@@ -8,7 +8,7 @@ import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/uploa
 export default class Update extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
-    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
   static description = 'Update Partner Connect integration'
   static examples = [
