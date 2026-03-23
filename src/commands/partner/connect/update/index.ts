@@ -8,25 +8,25 @@ import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/uploa
 export default class Update extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
-    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
-  static description = 'Update Partner Connect integration'
+  static description = 'update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
   static examples = [
     '$ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"',
   ]
   static flags = {
     json: Flags.boolean({description: 'Output in JSON format'}),
     description: Flags.string({
-      description: 'Description of the integration (up to 500 characters).',
+      description: 'description of the integration (up to 500 characters)',
     }),
     'docs-url': Flags.string({
-      description: 'Link to partner documentation or onboarding guide. Must be a valid URL.',
+      description: 'link to partner’s documentation or onboarding guide',
     }),
     'contact-email': Flags.string({
-      description: 'Contact email for integration support. Must be a valid email address.',
+      description: 'valid email for integration support',
     }),
     'logo-file': Flags.string({
-      description: 'Image path for the ISV logo. Must be a path to a valid image file.',
+      description: 'image path for the ISV logo',
     }),
   }
 

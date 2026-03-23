@@ -10,8 +10,8 @@ export default class Deactivate extends BaseCommand {
     id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
   static description = `deactivate a Heroku Connect partner integration
-  Deactivation prevents associating new Heroku Connect add-ons with the partner integration.
-  Deactivation also destroys any existing Heroku Connect add-ons associated with the partner integration.`
+ Deactivation prevents associating new Heroku Connect add-ons with the partner integration.
+ Deactivation also destroys any existing Heroku Connect add-ons associated with the partner integration.`
   static examples = [
     '$ heroku partner:connect:deactivate acme-integrations',
   ]

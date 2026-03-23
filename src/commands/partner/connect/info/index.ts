@@ -7,9 +7,9 @@ import * as Partner from '../../../../lib/partner/types.js'
 export default class Info extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
-    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
+    id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
   }
-  static description = 'display all metadata fields for a Heroku Connect partner integration'
+  static description = 'display details for a Heroku Connect partner integration'
   static examples = [
     '$ heroku partner:connect:info acme-integrations',
   ]
