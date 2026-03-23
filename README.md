@@ -35,7 +35,7 @@ USAGE
 
 ## `heroku partner:connect:create SLUG`
 
-Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.
+create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows
 
 ```
 USAGE
@@ -43,22 +43,22 @@ USAGE
     <value>] [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
-  SLUG  Label used to uniquely identify the ISV
+  SLUG  label for the ISV or partner
 
 FLAGS
-  --contact-email=<value>  Optional contact email for integration support. Must be a valid email address.
-  --description=<value>    Optional description of the integration (up to 500 characters).
-  --docs-url=<value>       Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.
-  --isv-name=<value>       (required) Name of the ISV or partner publishing the integration.
-  --logo-file=<value>      Optional image path for the ISV logo. Must be a path to a valid image file.
-  --team=<value>           (required) The Heroku team that owns this partner integration.
+  --contact-email=<value>  valid email for integration support
+  --description=<value>    description of the integration (up to 500 characters)
+  --docs-url=<value>       link to partner’s documentation or onboarding guide
+  --isv-name=<value>       (required) name of the ISV or partner publishing the integration
+  --logo-file=<value>      image path for the ISV logo
+  --team=<value>           (required) Heroku team that owns the partner integration
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and
-  Salesforce setup flows.
+  create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and
+  Salesforce setup flows
 
 EXAMPLES
   $ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"
@@ -68,22 +68,22 @@ _See code: [src/commands/partner/connect/create/index.ts](https://github.com/her
 
 ## `heroku partner:connect:deactivate ID_OR_SLUG`
 
-Deactivates a Heroku Connect partner integration.
+deactivate a Heroku Connect partner integration
 
 ```
 USAGE
   $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or integration name
+  ID_OR_SLUG  ID or name of the partner integration
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  Deactivates a Heroku Connect partner integration.
-  Deactivation prevents new Heroku Connect add-ons from being associated with the partner integration.
-  It also destroys any existing Heroku Connect add-ons that are associated with the partner integration.
+  deactivate a Heroku Connect partner integration
+  Deactivation prevents associating new Heroku Connect add-ons with the partner integration.
+  Deactivation also destroys any existing Heroku Connect add-ons associated with the partner integration.
 
 EXAMPLES
   $ heroku partner:connect:deactivate acme-integrations
@@ -93,14 +93,14 @@ _See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com
 
 ## `heroku partner:connect:info ID_OR_SLUG`
 
-display all metadata fields for a Heroku Connect partner integration
+display details for a Heroku Connect partner integration
 
 ```
 USAGE
   $ heroku partner:connect:info ID_OR_SLUG [--prompt] [--json]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or integration name
+  ID_OR_SLUG  ID or name of the partner integration
 
 FLAGS
   --json  output in JSON format
@@ -109,7 +109,7 @@ GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  display all metadata fields for a Heroku Connect partner integration
+  display details for a Heroku Connect partner integration
 
 EXAMPLES
   $ heroku partner:connect:info acme-integrations
@@ -119,7 +119,8 @@ _See code: [src/commands/partner/connect/info/index.ts](https://github.com/herok
 
 ## `heroku partner:connect:update ID_OR_SLUG`
 
-Update Partner Connect integration
+update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and
+Salesforce setup flows
 
 ```
 USAGE
@@ -127,20 +128,20 @@ USAGE
     [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
-  ID_OR_SLUG  Partner Connect integration ID or integration name
+  ID_OR_SLUG  ID or name of the partner integration
 
 FLAGS
-  --contact-email=<value>  Contact email for integration support. Must be a valid email address.
-  --description=<value>    Description of the integration (up to 500 characters).
-  --docs-url=<value>       Link to partner documentation or onboarding guide. Must be a valid URL.
+  --contact-email=<value>  valid email for integration support
+  --description=<value>    description of the integration (up to 500 characters)
+  --docs-url=<value>       link to partner’s documentation or onboarding guide
   --json                   Output in JSON format
-  --logo-file=<value>      Image path for the ISV logo. Must be a path to a valid image file.
+  --logo-file=<value>      image path for the ISV logo
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  Update Partner Connect integration
+  update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows
 
 EXAMPLES
   $ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"
