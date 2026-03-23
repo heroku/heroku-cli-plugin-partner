@@ -72,10 +72,13 @@ deactivate a Heroku Connect partner integration
 
 ```
 USAGE
-  $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt]
+  $ heroku partner:connect:deactivate ID_OR_SLUG [--prompt] [--confirm <value>]
 
 ARGUMENTS
   ID_OR_SLUG  ID or name of the partner integration
+
+FLAGS
+  --confirm=<value>  Confirms the deactivation. Must match the integration ID or slug.
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
