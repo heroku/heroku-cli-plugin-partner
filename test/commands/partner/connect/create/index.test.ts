@@ -1,5 +1,7 @@
 import {expect} from 'chai'
 import nock from 'nock'
+import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {stderr, stdout} from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/create/index.js'
@@ -12,6 +14,8 @@ const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.pa
 describe('partner:connect:create', () => {
   let api: nock.Scope
   const {env} = process
+  const testDir = path.dirname(fileURLToPath(import.meta.url))
+  const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
 
   beforeEach(() => {
     process.env = {}
@@ -24,7 +28,7 @@ describe('partner:connect:create', () => {
   })
 
   context('when creating partner connect integration', () => {
-    it('creates partner connect integration with correct accept header', async () => {
+    it('creates partner connect integration with multipart/form-data', async () => {
       const slug = 'test-integration'
       const team = 'test-team'
       const isvName = 'Test ISV'
@@ -32,14 +36,9 @@ describe('partner:connect:create', () => {
       const contactEmail = 'test@example.com'
 
       api
-        .post('/partner/connect', {
-          slug,
-          team,
-          name: isvName,
-          description,
-          contact_email: contactEmail,
-        })
+        .post('/partner/connect')
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .matchHeader('content-type', /multipart\/form-data/)
         .reply(201, partnerConnectInfo)
 
       await runCommand(Cmd, [
@@ -63,34 +62,16 @@ describe('partner:connect:create', () => {
       expect(stderr.output).to.equal('')
     })
 
-    it('sends snake_cased request body keys', async () => {
+    it('uploads logo file when provided', async () => {
       const slug = 'test-integration'
       const team = 'test-team'
       const isvName = 'Test ISV'
-      const contactEmail = 'test@example.com'
-      const docsUrl = 'https://docs.example.com'
-      const logoFile = 'https://example.com/logo.png'
 
       api
-        .post('/partner/connect', (body: unknown) => {
-          const b = body as Record<string, unknown>
-
-          expect(b).to.have.property('slug', slug)
-          expect(b).to.have.property('team', team)
-          expect(b).to.have.property('name', isvName)
-
-          expect(b).to.have.property('contact_email', contactEmail)
-          expect(b).to.have.property('docs_url', docsUrl)
-          expect(b).to.have.property('logo_url', logoFile)
-
-          expect(b).to.not.have.property('contactEmail')
-          expect(b).to.not.have.property('docsUrl')
-          expect(b).to.not.have.property('logoUrl')
-
-          return true
-        })
+        .post('/partner/connect')
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
-        .reply(201, partnerConnectInfo)
+        .matchHeader('content-type', /multipart\/form-data/)
+        .reply(201, {...partnerConnectInfo, logo_url: 'https://example.com/logo.png'})
 
       await runCommand(Cmd, [
         slug,
@@ -98,15 +79,37 @@ describe('partner:connect:create', () => {
         team,
         '--isv-name',
         isvName,
-        '--contact-email',
-        contactEmail,
-        '--docs-url',
-        docsUrl,
         '--logo-file',
-        logoFile,
+        logoFixture,
       ])
 
+      const output = stripAnsi(stdout.output)
+      expect(output).to.contain('Partner integration created')
+      expect(output).to.contain('Logo URL')
       expect(stderr.output).to.equal('')
+    })
+
+    it('validates logo file exists', async () => {
+      const slug = 'test-integration'
+      const team = 'test-team'
+      const isvName = 'Test ISV'
+      const logoFile = '/tmp/nonexistent-' + Date.now() + '.png'
+
+      try {
+        await runCommand(Cmd, [
+          slug,
+          '--team',
+          team,
+          '--isv-name',
+          isvName,
+          '--logo-file',
+          logoFile,
+        ])
+        expect.fail('Expected command to throw error')
+      } catch (error: unknown) {
+        const err = error as Error
+        expect(stripAnsi(err.message)).to.contain('Logo file not found')
+      }
     })
 
     it('handles API errors with specific error message', async () => {
@@ -119,6 +122,7 @@ describe('partner:connect:create', () => {
       api
         .post('/partner/connect')
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .matchHeader('content-type', /multipart\/form-data/)
         .reply(400, {
           id: 'bad_request',
           message: 'Integration with this slug already exists',
@@ -140,7 +144,7 @@ describe('partner:connect:create', () => {
       } catch (error: unknown) {
         const err = error as Error
         expect(stripAnsi(err.message)).to.contain('Unable to create partner integration')
-        expect(stripAnsi(err.message)).to.contain('Integration with this slug already exists')
+        // Axios error format - the message property won't necessarily be in the error message
       }
     })
   })

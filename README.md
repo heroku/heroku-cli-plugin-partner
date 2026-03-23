@@ -31,6 +31,7 @@ USAGE
 * [`heroku partner:connect:create SLUG`](#heroku-partnerconnectcreate-slug)
 * [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
+* [`heroku partner:connect:update ID_OR_SLUG`](#heroku-partnerconnectupdate-id_or_slug)
 
 ## `heroku partner:connect:create SLUG`
 
@@ -118,6 +119,37 @@ EXAMPLES
 ```
 
 _See code: [src/commands/partner/connect/info/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info/index.ts)_
+
+## `heroku partner:connect:update ID_OR_SLUG`
+
+Update Partner Connect integration
+
+```
+USAGE
+  $ heroku partner:connect:update ID_OR_SLUG [--prompt] [--json] [--description <value>] [--docs-url <value>]
+    [--contact-email <value>] [--logo-file <value>]
+
+ARGUMENTS
+  ID_OR_SLUG  Partner Connect integration ID or integration name
+
+FLAGS
+  --contact-email=<value>  Contact email for integration support. Must be a valid email address.
+  --description=<value>    Description of the integration (up to 500 characters).
+  --docs-url=<value>       Link to partner documentation or onboarding guide. Must be a valid URL.
+  --json                   Output in JSON format
+  --logo-file=<value>      Image path for the ISV logo. Must be a path to a valid image file.
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
+DESCRIPTION
+  Update Partner Connect integration
+
+EXAMPLES
+  $ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"
+```
+
+_See code: [src/commands/partner/connect/update/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/update/index.ts)_
 <!-- commandsstop -->
 
 # Development

@@ -10,7 +10,10 @@
     "@heroku-cli/schema": "^2.0.1",
     "@heroku/heroku-cli-util": "^10.6.1",
     "@oclif/core": "^4.10.0",
-    "@oclif/plugin-help": "^6"
+    "@oclif/plugin-help": "^6",
+    "@types/form-data": "^2.2.1",
+    "axios": "^1.13.6",
+    "form-data": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
@@ -68,8 +71,8 @@
   "repository": "heroku/heroku-cli-plugin-partner",
   "scripts": {
     "prepare": "yarn build",
-    "build:dist": "shx rm -rf dist && tsc -b && oclif manifest && shx cp oclif.manifest.json ./dist/oclif.manifest.json",
-    "build": "shx rm -rf dist && tsc -b && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
+    "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest && shx cp oclif.manifest.json ./dist/oclif.manifest.json",
+    "build": "shx rm -rf dist && tsc -b --force && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
     "lint": "eslint .",
     "pretest": "yarn build:dist",
     "posttest": "yarn lint",

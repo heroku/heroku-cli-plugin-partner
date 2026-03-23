@@ -5,42 +5,34 @@ import BaseCommand from '../../../../lib/base.js'
 import * as Partner from '../../../../lib/partner/types.js'
 import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/upload.js'
 
-export default class Create extends BaseCommand {
+export default class Update extends BaseCommand {
   static args = {
-    slug: Args.string({description: 'Label used to uniquely identify the ISV', required: true}),
+    // eslint-disable-next-line camelcase
+    id_or_slug: Args.string({description: 'Partner Connect integration ID or integration name', required: true}),
   }
-  static description =
-    'Creates a new partner integration record for Heroku Connect and stores ISV metadata used in Heroku Connect and Salesforce setup flows.'
+  static description = 'Update Partner Connect integration'
   static examples = [
-    '$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"',
+    '$ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"',
   ]
   static flags = {
-    team: Flags.string({
-      description: 'The Heroku team that owns this partner integration.',
-      required: true,
-    }),
-    'isv-name': Flags.string({
-      description: 'Name of the ISV or partner publishing the integration.',
-      required: true,
-    }),
+    json: Flags.boolean({description: 'Output in JSON format'}),
     description: Flags.string({
-      description: 'Optional description of the integration (up to 500 characters).',
+      description: 'Description of the integration (up to 500 characters).',
     }),
     'docs-url': Flags.string({
-      description: 'Optional link to partner’s documentation or onboarding guide. Must be a valid HTTP/HTTPS URL.',
+      description: 'Link to partner documentation or onboarding guide. Must be a valid URL.',
     }),
     'contact-email': Flags.string({
-      description: 'Optional contact email for integration support. Must be a valid email address.',
+      description: 'Contact email for integration support. Must be a valid email address.',
     }),
     'logo-file': Flags.string({
-      description: 'Optional image path for the ISV logo. Must be a path to a valid image file.',
+      description: 'Image path for the ISV logo. Must be a path to a valid image file.',
     }),
   }
 
   async run(): Promise<void> {
-    const {args, flags} = await this.parse(Create)
-
-    const isvName = flags['isv-name'] as string
+    const {args, flags} = await this.parse(Update)
+    const {id_or_slug: idOrSlug} = args
     const logoFile = flags['logo-file']
 
     // Validate logo file if provided
@@ -56,11 +48,9 @@ export default class Create extends BaseCommand {
     try {
       integration = await uploadPartnerData<Partner.PartnerConnect>({
         auth: this.heroku.auth,
-        endpoint: '/partner/connect',
+        endpoint: `/partner/connect/${idOrSlug}`,
+        method: 'PATCH',
         fields: {
-          name: isvName,
-          slug: args.slug,
-          team: flags.team,
           // eslint-disable-next-line camelcase
           contact_email: flags['contact-email'],
           description: flags.description,
@@ -72,22 +62,26 @@ export default class Create extends BaseCommand {
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       const message = connErr.body?.message || connErr.message || 'Unknown error'
-      this.error(`Unable to create partner integration.\nReason: ${message}`)
+      this.error(`Unable to update partner integration.\nReason: ${message}`)
     }
 
-    this.log('✓ Partner integration created')
+    if (flags.json) {
+      hux.styledJSON(integration)
+      return
+    }
+
+    this.log('✓ Partner integration updated')
     this.log('')
 
     hux.styledObject({
       'Slug': integration.slug,
       'Partner Integration': integration.name,
-      'Team': integration.team,
       'Description': integration.description || 'none',
       'Documentation URL': integration.docs_url || 'none',
       'Contact Email': integration.contact_email || 'none',
       'Logo URL': integration.logo_url || 'none',
       'Status': integration.status || 'none',
-      'Created At': integration.created_at || 'none',
+      'Updated At': integration.updated_at || 'none',
     })
   }
 }
