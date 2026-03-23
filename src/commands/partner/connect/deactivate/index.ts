@@ -48,10 +48,11 @@ export default class Deactivate extends BaseCommand {
         const details = failedResponses
           .map(r => `  - Add-on ${r.addon_guid}: ${r.error || r.message || 'Unknown error'}`)
           .join('\n')
-        this.error(
+        this.log(
           `Failed to deactivate partner integration for ${idOrSlug}.\n` +
           `${body.summary.failed} of ${body.summary.total} add-on deletions failed:\n${details}`
         )
+        this.exit(1)
       }
 
       this.log('✓ Partner integration deactivated')
