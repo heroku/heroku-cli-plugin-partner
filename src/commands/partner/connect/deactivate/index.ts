@@ -17,7 +17,7 @@ export default class Deactivate extends BaseCommand {
   ]
   static flags = {
     confirm: Flags.string({
-      description: 'Confirms the deactivation. Must match the integration ID or slug.',
+      description: 'pass in the integration ID or slug to skip confirmation prompts',
     }),
   }
     

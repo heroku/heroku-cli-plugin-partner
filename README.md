@@ -43,7 +43,7 @@ USAGE
     <value>] [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
-  SLUG  label for the ISV or partner
+  SLUG  name of the partner integration
 
 FLAGS
   --contact-email=<value>  valid email for integration support
@@ -78,7 +78,7 @@ ARGUMENTS
   ID_OR_SLUG  ID or name of the partner integration
 
 FLAGS
-  --confirm=<value>  Confirms the deactivation. Must match the integration ID or slug.
+  --confirm=<value>  pass in the integration ID or slug to skip confirmation prompts
 
 GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
@@ -137,7 +137,7 @@ FLAGS
   --contact-email=<value>  valid email for integration support
   --description=<value>    description of the integration (up to 500 characters)
   --docs-url=<value>       link to partner’s documentation or onboarding guide
-  --json                   Output in JSON format
+  --json                   output in JSON format
   --logo-file=<value>      image path for the ISV logo
 
 GLOBAL FLAGS

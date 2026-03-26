@@ -7,7 +7,7 @@ import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/uploa
 
 export default class Create extends BaseCommand {
   static args = {
-    slug: Args.string({description: 'label for the ISV or partner', required: true}),
+    slug: Args.string({description: 'name of the partner integration', required: true}),
   }
   static description =
     'create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
