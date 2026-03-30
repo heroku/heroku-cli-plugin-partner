@@ -48,7 +48,7 @@ export default class Info extends BaseCommand {
       'Team': integration.team,
       'Description': integration.description,
       'Documentation URL': integration.docs_url,
-      'Logo URL': integration.logo_url ? `${integration.logo_url} <Default: Heroku>` : '',
+      'Logo URL': integration.logo_url ? `${integration.logo_url}` : '<Default: Heroku>',
       'Status': integration.status,
       'Created At': integration.created_at,
       'Updated At': integration.updated_at,
