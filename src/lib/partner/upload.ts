@@ -57,16 +57,36 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
   // Make request with axios
   const url = `${vars.apiUrl}${endpoint}`
 
-  const response = await axios({
-    method,
-    url,
-    data: formData,
-    headers: {
-      ...formData.getHeaders(),
-      'Authorization': `Bearer ${auth}`,
-      'Accept': 'application/vnd.heroku+json; version=3.partner',
-    },
-  })
+  try {
+    const response = await axios({
+      method,
+      url,
+      data: formData,
+      headers: {
+        ...formData.getHeaders(),
+        'Authorization': `Bearer ${auth}`,
+        'Accept': 'application/vnd.heroku+json; version=3.partner',
+      },
+    })
 
-  return response.data
+    return response.data
+  } catch (error: unknown) {
+    // Transform axios error into ConnectionError format
+    if (axios.isAxiosError(error) && error.response) {
+      const err = new Error(error.message) as Error & {
+        body?: {
+          id: string
+          message: string
+          errors?: Record<string, string[]>
+        }
+        http?: {
+          statusCode?: number
+        }
+      }
+      err.body = error.response.data
+      err.http = {statusCode: error.response.status}
+      throw err
+    }
+    throw error
+  }
 }

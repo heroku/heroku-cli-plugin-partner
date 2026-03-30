@@ -71,7 +71,7 @@ export default class Create extends BaseCommand {
       })
     } catch (error) {
       const connErr = error as Partner.ConnectionError
-      const message = connErr.body?.message || connErr.message || 'Unknown error'
+      const message = Partner.formatConnectionError(connErr)
       this.error(`Unable to create partner integration.\nReason: ${message}`)
     }
 

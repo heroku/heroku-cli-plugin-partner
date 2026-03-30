@@ -124,8 +124,11 @@ describe('partner:connect:create', () => {
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
         .matchHeader('content-type', /multipart\/form-data/)
         .reply(400, {
-          id: 'bad_request',
-          message: 'Integration with this slug already exists',
+          id: 'validation_error',
+          message: 'Validation failed',
+          errors: {
+            slug: ['ISV with this slug already exists.'],
+          },
         })
 
       try {
@@ -144,7 +147,8 @@ describe('partner:connect:create', () => {
       } catch (error: unknown) {
         const err = error as Error
         expect(stripAnsi(err.message)).to.contain('Unable to create partner integration')
-        // Axios error format - the message property won't necessarily be in the error message
+        expect(stripAnsi(err.message)).to.contain('Validation failed')
+        expect(stripAnsi(err.message)).to.contain('slug: ISV with this slug already exists.')
       }
     })
   })
