@@ -14,9 +14,9 @@ interface partnerConnect {
 
 interface connectionError extends Error {
   body?: {
+    errors?: Record<string, string[]>
     id: string
     message: string
-    errors?: Record<string, string[]>
   }
   http?: {
     statusCode?: number

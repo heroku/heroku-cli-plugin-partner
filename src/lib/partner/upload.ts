@@ -1,5 +1,5 @@
 import {vars} from '@heroku-cli/command'
-import axios from 'axios'
+import axios, {isAxiosError} from 'axios'
 import FormData from 'form-data'
 import {existsSync, readFileSync, statSync} from 'node:fs'
 import path from 'node:path'
@@ -72,12 +72,12 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
     return response.data
   } catch (error: unknown) {
     // Transform axios error into ConnectionError format
-    if (axios.isAxiosError(error) && error.response) {
+    if (isAxiosError(error) && error.response) {
       const err = new Error(error.message) as Error & {
         body?: {
+          errors?: Record<string, string[]>
           id: string
           message: string
-          errors?: Record<string, string[]>
         }
         http?: {
           statusCode?: number
@@ -87,6 +87,7 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
       err.http = {statusCode: error.response.status}
       throw err
     }
+
     throw error
   }
 }
