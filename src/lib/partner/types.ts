@@ -9,6 +9,7 @@ interface partnerConnect {
   slug: string
   status?: string
   team: string
+  team_name: string
   updated_at?: string
 }
 
