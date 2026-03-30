@@ -122,8 +122,7 @@ _See code: [src/commands/partner/connect/info/index.ts](https://github.com/herok
 
 ## `heroku partner:connect:update ID_OR_SLUG`
 
-update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and
-Salesforce setup flows
+update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows
 
 ```
 USAGE
@@ -144,7 +143,8 @@ GLOBAL FLAGS
   --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
-  update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows
+  update a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and
+  Salesforce setup flows
 
 EXAMPLES
   $ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"

@@ -15,7 +15,7 @@ export default class Update extends BaseCommand {
     '$ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"',
   ]
   static flags = {
-    json: Flags.boolean({description: 'Output in JSON format'}),
+    json: Flags.boolean({description: 'output in JSON format'}),
     description: Flags.string({
       description: 'description of the integration (up to 500 characters)',
     }),
