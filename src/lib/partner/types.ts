@@ -15,6 +15,7 @@ interface partnerConnect {
 
 interface connectionError extends Error {
   body?: {
+    errors?: Record<string, string[]>
     id: string
     message: string
   }
@@ -55,3 +56,20 @@ export type PartnerConnect = partnerConnect
 export type ConnectionError = connectionError
 export type CreatePartnerConnect = createPartnerConnect
 export type DeactivateResponse = deactivateResponse
+
+/**
+ * Format a ConnectionError with detailed validation errors if available
+ */
+export function formatConnectionError(error: ConnectionError): string {
+  let message = error.body?.message || error.message || 'Unknown error'
+
+  // Include detailed validation errors if available
+  if (error.body?.errors) {
+    const errorDetails = Object.entries(error.body.errors)
+      .map(([field, messages]) => `  ${field}: ${messages.join(', ')}`)
+      .join('\n')
+    message = `${message}\n${errorDetails}`
+  }
+
+  return message
+}

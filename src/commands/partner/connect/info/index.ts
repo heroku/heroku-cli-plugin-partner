@@ -31,7 +31,7 @@ export default class Info extends BaseCommand {
       if (connErr.body && connErr.body.id === 'record_not_found') {
         this.error(`No partner integration found for ${idOrSlug}`)
       } else {
-        const message = connErr.body?.message || connErr.message || 'Unknown error'
+        const message = Partner.formatConnectionError(connErr)
         this.error(`Unable to retrieve partner integration details\nReason: ${message}`)
       }
     }

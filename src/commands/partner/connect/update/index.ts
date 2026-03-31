@@ -61,7 +61,7 @@ export default class Update extends BaseCommand {
       })
     } catch (error) {
       const connErr = error as Partner.ConnectionError
-      const message = connErr.body?.message || connErr.message || 'Unknown error'
+      const message = Partner.formatConnectionError(connErr)
       this.error(`Unable to update partner integration.\nReason: ${message}`)
     }
 

@@ -66,7 +66,7 @@ export default class Deactivate extends BaseCommand {
         this.error(`No partner integration found for ${idOrSlug}`)
       }
 
-      const message = connErr.body?.message || connErr.message || 'Unknown error'
+      const message = Partner.formatConnectionError(connErr)
       this.error(`Failed to deactivate partner integration for ${idOrSlug}.\nReason: ${message}`)
     }
   }
