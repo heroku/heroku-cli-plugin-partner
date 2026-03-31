@@ -15,6 +15,7 @@ export default class Create extends BaseCommand {
     '$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"',
   ]
   static flags = {
+    json: Flags.boolean({description: 'output in JSON format'}),
     team: Flags.string({
       description: 'Heroku team that owns the partner integration',
       required: true,
@@ -73,6 +74,11 @@ export default class Create extends BaseCommand {
       const connErr = error as Partner.ConnectionError
       const message = Partner.formatConnectionError(connErr)
       this.error(`Unable to create partner integration.\nReason: ${message}`)
+    }
+
+    if (flags.json) {
+      hux.styledJSON(integration)
+      return
     }
 
     this.log('✓ Partner integration created')

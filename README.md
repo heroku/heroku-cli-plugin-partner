@@ -39,8 +39,8 @@ create a partner integration record for Heroku Connect and store the ISV metadat
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--prompt] [--description <value>] [--docs-url
-    <value>] [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--prompt] [--json] [--description <value>]
+    [--docs-url <value>] [--contact-email <value>] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  name of the partner integration
@@ -50,6 +50,7 @@ FLAGS
   --description=<value>    description of the integration (up to 500 characters)
   --docs-url=<value>       link to partner’s documentation or onboarding guide
   --isv-name=<value>       (required) name of the ISV or partner publishing the integration
+  --json                   output in JSON format
   --logo-file=<value>      image path for the ISV logo
   --team=<value>           (required) Heroku team that owns the partner integration
 
