@@ -22,9 +22,7 @@ export default class Enroll extends BaseCommand {
     const {args, flags} = await this.parse(Enroll)
     const {id_or_slug: idOrSlug} = args
     const {addon: addonId} = flags
-
     this.log(`Enrolling add-on ${addonId} into partner integration ${idOrSlug}...`)
-
     let enrollResponse: Partner.EnrollResponse
     try {
       const endpoint = `/partner/connect/${idOrSlug}/addon/${addonId}/enroll`
@@ -32,15 +30,29 @@ export default class Enroll extends BaseCommand {
       enrollResponse = body
     } catch (error) {
       const connErr = error as Partner.ConnectionError
-      if (connErr.body?.id === 'not_found') {
-        this.error(connErr.body?.message || `Add-on '${addonId}' not found`)
-      } else if (connErr.body?.id === 'conflict') {
-        this.error(connErr.body?.message || `Add-on '${addonId}' is already associated with an ISV`)
-      } else if (connErr.body?.id === 'forbidden') {
-        this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
-      } else {
-        const message = Partner.formatConnectionError(connErr)
-        this.error(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'.\nReason: ${message}`)
+      switch (connErr.body?.id) {
+        case 'conflict': {
+          this.error(connErr.body?.message || `Add-on '${addonId}' is already associated with an ISV`)
+
+          break
+        }
+
+        case 'forbidden': {
+          this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
+
+          break
+        }
+
+        case 'not_found': {
+          this.error(connErr.body?.message || `Add-on '${addonId}' not found`)
+
+          break
+        }
+
+        default: {
+          const message = Partner.formatConnectionError(connErr)
+          this.error(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'.\nReason: ${message}`)
+        }
       }
     }
 
@@ -48,6 +60,7 @@ export default class Enroll extends BaseCommand {
 
     if (flags.json) {
       hux.styledJSON(enrollResponse)
+
       return
     }
 
