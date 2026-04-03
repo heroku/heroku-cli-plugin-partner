@@ -13,7 +13,6 @@ export default class Enroll extends BaseCommand {
   static examples = [
     '$ heroku partner:connect:enroll acme-integrations --addon addon-id',
   ]
-
   static flags = {
     addon: Flags.string({description: 'ID or name of the add-on to enroll', required: true}),
     json: Flags.boolean({description: 'output in JSON format'}),
@@ -41,11 +40,10 @@ export default class Enroll extends BaseCommand {
             this.error(`Add-on '${addonId}' is already associated with an ISV`)
         }
 
-        // since connErr.body?.message is a given is the message after \\ useful?...this applies to all 
         if (connErr.body?.id === 'forbidden') {
             this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
         }
-        // when wud this run?
+
         const message = Partner.formatConnectionError(connErr)
         this.error(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'.\nReason: ${message}`)
 

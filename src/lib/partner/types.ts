@@ -52,9 +52,6 @@ interface deactivateResponse {
   }
 }
 
-/**
- * to do: change to match the actual response from the partner API once the API is ready
- */
 interface enrollResponse {
   addon_uuid: string
   isv_guid: string
