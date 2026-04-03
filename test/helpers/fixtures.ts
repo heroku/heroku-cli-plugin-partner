@@ -31,3 +31,10 @@ export const deactivateResponse = {
   },
   responses: [],
 }
+
+export const enrollResponse = {
+  addon_uuid: '01234567-89ab-cdef-0123-456789abcdef',
+  isv_guid: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
+  isv_slug: 'example',
+  message: 'Add-on enrolled successfully',
+}

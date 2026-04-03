@@ -52,10 +52,21 @@ interface deactivateResponse {
   }
 }
 
+/**
+ * to do: change to match the actual response from the partner API once the API is ready
+ */
+interface enrollResponse {
+  addon_uuid: string
+  isv_guid: string
+  isv_slug: string
+  message: string
+}
+
 export type PartnerConnect = partnerConnect
 export type ConnectionError = connectionError
 export type CreatePartnerConnect = createPartnerConnect
 export type DeactivateResponse = deactivateResponse
+export type EnrollResponse = enrollResponse
 
 /**
  * Format a ConnectionError with detailed validation errors if available
