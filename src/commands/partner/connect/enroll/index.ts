@@ -27,41 +27,34 @@ export default class Enroll extends BaseCommand {
 
     let enrollResponse: Partner.EnrollResponse
     try {
-        const endpoint = `/partner/connect/${idOrSlug}/addon/${addonId}/enroll`
-        const {body} = await this.apiClient.post<Partner.EnrollResponse>(endpoint, {body: {}})
-        enrollResponse = body
-      } catch (error) {
-        const connErr = error as Partner.ConnectionError
-        if (connErr.body?.id === 'not_found') {
-            this.error(`Add-on '${addonId}' not found`)
-          }
-
-        if (connErr.body?.id === 'conflict') {
-            this.error(`Add-on '${addonId}' is already associated with an ISV`)
-        }
-
-        if (connErr.body?.id === 'forbidden') {
-            this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
-        }
-
+      const endpoint = `/partner/connect/${idOrSlug}/addon/${addonId}/enroll`
+      const {body} = await this.apiClient.post<Partner.EnrollResponse>(endpoint, {body: {}})
+      enrollResponse = body
+    } catch (error) {
+      const connErr = error as Partner.ConnectionError
+      if (connErr.body?.id === 'not_found') {
+        this.error(connErr.body?.message || `Add-on '${addonId}' not found`)
+      } else if (connErr.body?.id === 'conflict') {
+        this.error(connErr.body?.message || `Add-on '${addonId}' is already associated with an ISV`)
+      } else if (connErr.body?.id === 'forbidden') {
+        this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
+      } else {
         const message = Partner.formatConnectionError(connErr)
         this.error(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'.\nReason: ${message}`)
-
       }
-    
-      this.log('✓ Add-on enrolled successfully')
+    }
 
-      if (flags.json) {
-        hux.styledJSON(enrollResponse)
-        return
-      }
+    this.log(`✓ ${enrollResponse.message}`)
 
-      hux.styledObject({
-        'Add-on UUID': enrollResponse.addon_uuid,
-        'ISV GUID': enrollResponse.isv_guid,
-        'ISV Slug': enrollResponse.isv_slug,
-      })
+    if (flags.json) {
+      hux.styledJSON(enrollResponse)
+      return
+    }
 
-
+    hux.styledObject({
+      'Add-on UUID': enrollResponse.addon_uuid,
+      'ISV GUID': enrollResponse.isv_guid,
+      'ISV Slug': enrollResponse.isv_slug,
+    })
   }
 }

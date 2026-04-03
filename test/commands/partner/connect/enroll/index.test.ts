@@ -47,7 +47,7 @@ describe('partner:connect:enroll', () => {
               .reply(200, enrollResponse)
             await runCommand(Cmd, [idOrSlug, '--addon', addonId])
             const output = stripAnsi(stdout.output)
-            expect(output).to.contain('Add-on enrolled successfully')
+            expect(output).to.contain(enrollResponse.message)
             expect(output).to.contain('Add-on UUID')
             expect(output).to.contain(enrollResponse.addon_uuid)
             expect(output).to.contain('ISV GUID')
@@ -71,7 +71,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain(`Add-on '${addonId}' not found`)
+            expect(stripAnsi(err.message)).to.contain(`Add-on with UUID '${addonId}' not found`)
           }
         })
         it('shows error when add-on is already enrolled', async () => {
@@ -84,7 +84,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain(`Add-on '${addonId}' is already associated with an ISV`)
+            expect(stripAnsi(err.message)).to.contain('Add-on is already associated with an ISV')
           }
         })
         it('shows error when not authorized to enroll add-on', async () => {
@@ -114,7 +114,4 @@ describe('partner:connect:enroll', () => {
           }
         })
       })
-
-
-
 })
