@@ -56,14 +56,14 @@ export default class Enroll extends BaseCommand {
       }
     }
 
-    this.log(`✓ ${enrollResponse.message}`)
-
     if (flags.json) {
-      hux.styledJSON(enrollResponse)
-
-      return
+        hux.styledJSON(enrollResponse)
+        
+        return
     }
-
+    
+    this.log(`✓ ${enrollResponse.message}`)
+    
     hux.styledObject({
       'Add-on UUID': enrollResponse.addon_uuid,
       'ISV GUID': enrollResponse.isv_guid,
