@@ -30,6 +30,7 @@ USAGE
 <!-- commands -->
 * [`heroku partner:connect:create SLUG`](#heroku-partnerconnectcreate-slug)
 * [`heroku partner:connect:deactivate ID_OR_SLUG`](#heroku-partnerconnectdeactivate-id_or_slug)
+* [`heroku partner:connect:enroll ID_OR_SLUG`](#heroku-partnerconnectenroll-id_or_slug)
 * [`heroku partner:connect:info ID_OR_SLUG`](#heroku-partnerconnectinfo-id_or_slug)
 * [`heroku partner:connect:update ID_OR_SLUG`](#heroku-partnerconnectupdate-id_or_slug)
 
@@ -94,6 +95,33 @@ EXAMPLES
 ```
 
 _See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_
+
+## `heroku partner:connect:enroll ID_OR_SLUG`
+
+enroll an existing add-on into a partner integration
+
+```
+USAGE
+  $ heroku partner:connect:enroll ID_OR_SLUG --addon <value> [--prompt] [--json]
+
+ARGUMENTS
+  ID_OR_SLUG  ID or name of the partner integration
+
+FLAGS
+  --addon=<value>  (required) ID or name of the add-on to enroll
+  --json           output in JSON format
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
+
+DESCRIPTION
+  enroll an existing add-on into a partner integration
+
+EXAMPLES
+  $ heroku partner:connect:enroll acme-integrations --addon addon-id
+```
+
+_See code: [src/commands/partner/connect/enroll/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/enroll/index.ts)_
 
 ## `heroku partner:connect:info ID_OR_SLUG`
 
