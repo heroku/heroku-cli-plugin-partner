@@ -8,8 +8,10 @@ interface partnerConnect {
   name: string
   slug: string
   status?: string
-  team: string
-  team_name: string
+  team: {
+    id: string
+    name: string
+  }
   updated_at?: string
 }
 

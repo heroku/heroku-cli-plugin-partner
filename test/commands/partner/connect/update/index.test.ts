@@ -19,7 +19,10 @@ const partnerConnectUpdateResponse = {
   contact_email: 'partner@example.com',
   logo_url: '/path/to/logo.png',
   status: 'active',
-  team: 'acme-team',
+  team: {
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+    name: 'acme-team',
+  },
   updated_at: '2021-06-01T00:00:00Z',
 }
 

@@ -15,8 +15,10 @@ export const partnerConnectInfo = {
   name: 'Example Integration',
   slug: 'example',
   status: 'active',
-  team: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-  team_name: 'acme-team',
+  team: {
+    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+    name: 'acme-team',
+  },
   updated_at: '2021-01-01T00:00:00Z',
 }
 

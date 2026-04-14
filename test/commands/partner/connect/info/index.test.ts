@@ -68,7 +68,7 @@ describe('partner:connect:info', () => {
       expect(output).to.contain('Contact Email')
       expect(output).to.contain(partnerConnectInfo.contact_email)
       expect(output).to.contain('Team')
-      expect(output).to.contain(partnerConnectInfo.team_name)
+      expect(output).to.contain(partnerConnectInfo.team.name)
       expect(stderr.output).to.equal('')
     })
   })
