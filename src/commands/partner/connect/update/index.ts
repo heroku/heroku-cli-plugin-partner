@@ -76,11 +76,13 @@ export default class Update extends BaseCommand {
     hux.styledObject({
       'Slug': integration.slug,
       'Partner Integration': integration.name,
+      'Team': integration.team.name,
       'Description': integration.description || 'none',
       'Documentation URL': integration.docs_url || 'none',
       'Contact Email': integration.contact_email || 'none',
       'Logo URL': integration.logo_url || 'none',
       'Status': integration.status || 'none',
+      'Created At': integration.created_at || 'none',
       'Updated At': integration.updated_at || 'none',
     })
   }

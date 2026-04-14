@@ -87,7 +87,7 @@ export default class Create extends BaseCommand {
     hux.styledObject({
       'Slug': integration.slug,
       'Partner Integration': integration.name,
-      'Team': integration.team_name,
+      'Team': integration.team.name,
       'Description': integration.description || 'none',
       'Documentation URL': integration.docs_url || 'none',
       'Contact Email': integration.contact_email || 'none',

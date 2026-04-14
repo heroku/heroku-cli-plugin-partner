@@ -44,10 +44,10 @@ export default class Info extends BaseCommand {
     hux.styledObject({
       'Slug': integration.slug,
       'Partner Integration': integration.name,
-      'Contact Email': integration.contact_email,
-      'Team': integration.team_name,
+      'Team': integration.team.name,
       'Description': integration.description,
       'Documentation URL': integration.docs_url,
+      'Contact Email': integration.contact_email,
       'Logo URL': integration.logo_url ? `${integration.logo_url}` : '<Default: Heroku>',
       'Status': integration.status,
       'Created At': integration.created_at,
