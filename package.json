@@ -40,7 +40,10 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 22"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.5"
   },
   "files": [
     "./bin",
@@ -70,12 +73,12 @@
   },
   "repository": "heroku/heroku-cli-plugin-partner",
   "scripts": {
-    "prepare": "yarn build",
+    "prepare": "npm run build",
     "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest && shx cp oclif.manifest.json ./dist/oclif.manifest.json",
     "build": "shx rm -rf dist && tsc -b --force && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
     "lint": "eslint .",
-    "pretest": "yarn build:dist",
-    "posttest": "yarn lint",
+    "pretest": "npm run build:dist",
+    "posttest": "npm run lint",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
