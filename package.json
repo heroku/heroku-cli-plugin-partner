@@ -24,13 +24,17 @@
     "@types/nock": "^10.0.3",
     "@types/node": "22.14.1",
     "@types/sinon": "^21.0.0",
+    "c8": "^11.0.0",
     "chai": "^4",
     "eslint": "^9",
     "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "mocha": "^10",
     "nock": "^14.0.11",
     "oclif": "^4",
+    "prettier": "^3.8.3",
     "shx": "^0.3.3",
     "sinon": "^21.0.2",
     "stdout-stderr": "^0.1.13",
@@ -40,10 +44,12 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 22"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.5"
   },
   "files": [
-    "./bin",
     "./dist",
     "./oclif.manifest.json"
   ],
@@ -70,13 +76,16 @@
   },
   "repository": "heroku/heroku-cli-plugin-partner",
   "scripts": {
-    "prepare": "yarn build",
+    "prepare": "husky && npm run build",
     "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest && shx cp oclif.manifest.json ./dist/oclif.manifest.json",
     "build": "shx rm -rf dist && tsc -b --force && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
     "lint": "eslint .",
-    "pretest": "yarn build:dist",
-    "posttest": "yarn lint",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier . --write --config ./.prettier.mjs",
+    "format": "npm run prettier && npm run lint:fix",
+    "pretest": "npm run build:dist",
+    "posttest": "npm run lint",
+    "test": "c8 mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"

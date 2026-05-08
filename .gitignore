@@ -2,13 +2,14 @@
 *-error.log
 **/.DS_Store
 /.idea
+/coverage
 /dist
 /tmp
 /node_modules
 oclif.manifest.json
 tsconfig.tsbuildinfo
 
-package-lock.json
+yarn.lock
 pnpm-lock.yaml
 .pnp.*
 .yarn/*
