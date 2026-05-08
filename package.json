@@ -24,6 +24,7 @@
     "@types/nock": "^10.0.3",
     "@types/node": "22.14.1",
     "@types/sinon": "^21.0.0",
+    "c8": "^11.0.0",
     "chai": "^4",
     "eslint": "^9",
     "eslint-config-oclif": "^6",
@@ -85,7 +86,7 @@
     "format": "npm run prettier && npm run lint:fix",
     "pretest": "npm run build:dist",
     "posttest": "npm run lint",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "c8 mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts"
