@@ -49,7 +49,7 @@ ARGUMENTS
 FLAGS
   --contact-email=<value>  valid email for integration support
   --description=<value>    description of the integration (up to 500 characters)
-  --docs-url=<value>       link to partner’s documentation or onboarding guide
+  --docs-url=<value>       link to partner's documentation or onboarding guide
   --isv-name=<value>       (required) name of the ISV or partner publishing the integration
   --json                   output in JSON format
   --logo-file=<value>      image path for the ISV logo
@@ -164,7 +164,7 @@ ARGUMENTS
 FLAGS
   --contact-email=<value>  valid email for integration support
   --description=<value>    description of the integration (up to 500 characters)
-  --docs-url=<value>       link to partner’s documentation or onboarding guide
+  --docs-url=<value>       link to partner's documentation or onboarding guide
   --json                   output in JSON format
   --logo-file=<value>      image path for the ISV logo
 

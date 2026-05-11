@@ -1,12 +1,12 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import nock from 'nock'
 import path from 'node:path'
-import {fileURLToPath} from 'node:url'
-import {stderr, stdout} from 'stdout-stderr'
+import { fileURLToPath } from 'node:url'
+import { stderr, stdout } from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/update/index.js'
 import stripAnsi from '../../../../helpers/strip-ansi.js'
-import {runCommand} from '../../../../run-command.js'
+import { runCommand } from '../../../../run-command.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
@@ -28,7 +28,7 @@ const partnerConnectUpdateResponse = {
 
 describe('partner:connect:update', () => {
   let api: nock.Scope
-  const {env} = process
+  const { env } = process
   const id = '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36'
   const testDir = path.dirname(fileURLToPath(import.meta.url))
   const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
@@ -52,7 +52,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration updated')
+    expect(stdout.output).to.contain('Updated partner integration')
     expect(stderr.output).to.equal('')
   })
 
@@ -111,13 +111,16 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [
       id,
-      '--description', 'New description',
-      '--docs-url', 'https://example.com/docs',
-      '--contact-email', 'partner@example.com',
+      '--description',
+      'New description',
+      '--docs-url',
+      'https://example.com/docs',
+      '--contact-email',
+      'partner@example.com',
     ])
 
     const output = stripAnsi(stdout.output)
-    expect(output).to.contain('Partner integration updated')
+    expect(output).to.contain('Updated partner integration')
     expect(output).to.contain('Description')
     expect(output).to.contain('New description')
     expect(output).to.contain('Documentation URL')
@@ -140,7 +143,7 @@ describe('partner:connect:update', () => {
     await runCommand(Cmd, [id, '--logo-file', logoFixture])
 
     const output = stripAnsi(stdout.output)
-    expect(output).to.contain('Partner integration updated')
+    expect(output).to.contain('Updated partner integration')
     expect(output).to.contain('Logo URL')
     expect(output).to.contain('https://example.com/logo.png')
     expect(stderr.output).to.equal('')
@@ -154,7 +157,7 @@ describe('partner:connect:update', () => {
       expect.fail('Expected command to throw error')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Logo file not found')
+      expect(stripAnsi(err.message)).to.contain("We can't find the logo file")
     }
   })
 
@@ -163,14 +166,17 @@ describe('partner:connect:update', () => {
       .patch(`/partner/connect/${id}`)
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
       .matchHeader('content-type', /multipart\/form-data/)
-      .reply(404, {id: 'not_found', message: 'Couldn\'t find that integration.'})
+      .reply(404, {
+        id: 'not_found',
+        message: "Couldn't find that integration.",
+      })
 
     try {
       await runCommand(Cmd, [id])
       expect.fail('Expected command to throw')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Unable to update partner integration')
+      expect(stripAnsi(err.message)).to.contain("We can't update the partner integration")
     }
   })
 
@@ -179,14 +185,14 @@ describe('partner:connect:update', () => {
       .patch(`/partner/connect/1234567890`)
       .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
       .matchHeader('content-type', /multipart\/form-data/)
-      .reply(422, {id: 'invalid_params', message: 'id not a uuid.'})
+      .reply(422, { id: 'invalid_params', message: 'id not a uuid.' })
 
     try {
       await runCommand(Cmd, ['1234567890', '--description', 'New description'])
       expect.fail('Expected command to throw')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Unable to update partner integration')
+      expect(stripAnsi(err.message)).to.contain("We can't update the partner integration")
     }
   })
 
@@ -199,7 +205,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration updated')
+    expect(stdout.output).to.contain('Updated partner integration')
     expect(stderr.output).to.equal('')
   })
 })

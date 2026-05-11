@@ -1,5 +1,5 @@
-import {hux} from '@heroku/heroku-cli-util'
-import {Args, Flags} from '@oclif/core'
+import { color, hux } from '@heroku/heroku-cli-util'
+import { Args, Flags } from '@oclif/core'
 
 import BaseCommand from '../../../../lib/base.js'
 import * as Partner from '../../../../lib/partner/types.js'
@@ -7,32 +7,32 @@ import * as Partner from '../../../../lib/partner/types.js'
 export default class Info extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
-    id_or_slug: Args.string({description: 'ID or name of the partner integration', required: true}),
+    id_or_slug: Args.string({
+      description: 'ID or name of the partner integration',
+      required: true,
+    }),
   }
   static description = 'display details for a Heroku Connect partner integration'
-  static examples = [
-    '$ heroku partner:connect:info acme-integrations',
-  ]
+  static examples = ['$ heroku partner:connect:info acme-integrations']
   static flags = {
-    json: Flags.boolean({description: 'output in JSON format'}),
+    json: Flags.boolean({ description: 'output in JSON format' }),
   }
 
   async run(): Promise<void> {
-    const {args, flags} = await this.parse(Info)
-    const {id_or_slug: idOrSlug} = args
+    const { args, flags } = await this.parse(Info)
+    const { id_or_slug: idOrSlug } = args
 
     let integration: Partner.PartnerConnect
     try {
       const endpoint = `/partner/connect/${idOrSlug}`
-      const {body} = await this.apiClient.get<Partner.PartnerConnect>(endpoint)
+      const { body } = await this.apiClient.get<Partner.PartnerConnect>(endpoint)
       integration = body
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       if (connErr.body && connErr.body.id === 'record_not_found') {
-        this.error(`No partner integration found for ${idOrSlug}`)
+        this.error(`Partner integration ${color.name(idOrSlug)} doesn't exist.`)
       } else {
-        const message = Partner.formatConnectionError(connErr)
-        this.error(`Unable to retrieve partner integration details\nReason: ${message}`)
+        this.error(`We can't retrieve partner integration ${color.name(idOrSlug)} details due to an unexpected error.`)
       }
     }
 
@@ -42,14 +42,14 @@ export default class Info extends BaseCommand {
     }
 
     hux.styledObject({
-      'Slug': integration.slug,
+      Slug: integration.slug,
       'Partner Integration': integration.name,
-      'Team': integration.team.name,
-      'Description': integration.description,
+      Team: integration.team.name,
+      Description: integration.description,
       'Documentation URL': integration.docs_url,
       'Contact Email': integration.contact_email,
       'Logo URL': integration.logo_url ? `${integration.logo_url}` : '<Default: Heroku>',
-      'Status': integration.status,
+      Status: integration.status,
       'Created At': integration.created_at,
       'Updated At': integration.updated_at,
     })

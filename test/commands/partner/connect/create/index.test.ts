@@ -1,19 +1,19 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import nock from 'nock'
 import path from 'node:path'
-import {fileURLToPath} from 'node:url'
-import {stderr, stdout} from 'stdout-stderr'
+import { fileURLToPath } from 'node:url'
+import { stderr, stdout } from 'stdout-stderr'
 
 import Cmd from '../../../../../src/commands/partner/connect/create/index.js'
-import {partnerConnectInfo} from '../../../../helpers/fixtures.js'
+import { partnerConnectInfo } from '../../../../helpers/fixtures.js'
 import stripAnsi from '../../../../helpers/strip-ansi.js'
-import {runCommand} from '../../../../run-command.js'
+import { runCommand } from '../../../../run-command.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
 describe('partner:connect:create', () => {
   let api: nock.Scope
-  const {env} = process
+  const { env } = process
   const testDir = path.dirname(fileURLToPath(import.meta.url))
   const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
 
@@ -54,7 +54,7 @@ describe('partner:connect:create', () => {
       ])
 
       const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Partner integration created')
+      expect(output).to.contain('Created partner integration')
       expect(output).to.contain('Slug')
       expect(output).to.contain(partnerConnectInfo.slug)
       expect(output).to.contain('Partner Integration')
@@ -71,20 +71,15 @@ describe('partner:connect:create', () => {
         .post('/partner/connect')
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
         .matchHeader('content-type', /multipart\/form-data/)
-        .reply(201, {...partnerConnectInfo, logo_url: 'https://example.com/logo.png'})
+        .reply(201, {
+          ...partnerConnectInfo,
+          logo_url: 'https://example.com/logo.png',
+        })
 
-      await runCommand(Cmd, [
-        slug,
-        '--team',
-        team,
-        '--isv-name',
-        isvName,
-        '--logo-file',
-        logoFixture,
-      ])
+      await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFixture])
 
       const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Partner integration created')
+      expect(output).to.contain('Created partner integration')
       expect(output).to.contain('Logo URL')
       expect(stderr.output).to.equal('')
     })
@@ -96,19 +91,11 @@ describe('partner:connect:create', () => {
       const logoFile = '/tmp/nonexistent-' + Date.now() + '.png'
 
       try {
-        await runCommand(Cmd, [
-          slug,
-          '--team',
-          team,
-          '--isv-name',
-          isvName,
-          '--logo-file',
-          logoFile,
-        ])
+        await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFile])
         expect.fail('Expected command to throw error')
       } catch (error: unknown) {
         const err = error as Error
-        expect(stripAnsi(err.message)).to.contain('Logo file not found')
+        expect(stripAnsi(err.message)).to.contain("We can't find the logo file")
       }
     })
 
@@ -146,7 +133,7 @@ describe('partner:connect:create', () => {
         expect.fail('Expected command to throw error')
       } catch (error: unknown) {
         const err = error as Error
-        expect(stripAnsi(err.message)).to.contain('Unable to create partner integration')
+        expect(stripAnsi(err.message)).to.contain("We can't create the partner integration")
         expect(stripAnsi(err.message)).to.contain('Validation failed')
         expect(stripAnsi(err.message)).to.contain('slug: ISV with this slug already exists.')
       }

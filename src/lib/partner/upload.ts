@@ -1,9 +1,11 @@
-import {vars} from '@heroku-cli/command'
-import axios, {isAxiosError} from 'axios'
+import { vars } from '@heroku-cli/command'
+import axios, { isAxiosError } from 'axios'
 import FormData from 'form-data'
-import {existsSync, readFileSync, statSync} from 'node:fs'
+import { existsSync, readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
+import tsheredoc from 'tsheredoc'
 
+const heredoc = tsheredoc.default
 export interface UploadOptions {
   auth: string | undefined
   endpoint: string
@@ -18,17 +20,26 @@ export interface UploadOptions {
  */
 export function validateLogoFile(logoFile: string): void {
   if (!existsSync(logoFile)) {
-    throw new Error(`Logo file not found: ${logoFile}`)
+    throw new Error(heredoc`
+      We can't find the logo file: ${logoFile}
+      Check the location of the logo file and try again.
+    `)
   }
 
   const stats = statSync(logoFile)
   if (!stats.isFile()) {
-    throw new Error(`Logo path is not a file: ${logoFile}`)
+    throw new Error(heredoc`
+      Logo path isn't a valid file: ${logoFile}
+      Make sure the logo path is valid and try again.
+    `)
   }
 
   const maxSize = 5 * 1024 * 1024 // 5MB
   if (stats.size > maxSize) {
-    throw new Error(`Logo file size exceeds 5MB: ${(stats.size / (1024 * 1024)).toFixed(2)}MB`)
+    throw new Error(heredoc`
+      Logo file size exceeds 5 MB: ${(stats.size / (1024 * 1024)).toFixed(2)} MB
+      Use a logo file under 5 MB and try again.
+    `)
   }
 }
 
@@ -36,7 +47,7 @@ export function validateLogoFile(logoFile: string): void {
  * Upload partner integration data with optional logo file
  */
 export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
-  const {auth, endpoint, fields, logoFile, method = 'POST'} = options
+  const { auth, endpoint, fields, logoFile, method = 'POST' } = options
 
   // Create FormData with all fields
   const formData = new FormData()
@@ -51,7 +62,9 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
   // Add logo file if provided
   if (logoFile) {
     const fileBuffer = readFileSync(logoFile)
-    formData.append('logo_image', fileBuffer, {filename: path.basename(logoFile)})
+    formData.append('logo_image', fileBuffer, {
+      filename: path.basename(logoFile),
+    })
   }
 
   // Make request with axios
@@ -64,8 +77,8 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
       data: formData,
       headers: {
         ...formData.getHeaders(),
-        'Authorization': `Bearer ${auth}`,
-        'Accept': 'application/vnd.heroku+json; version=3.partner',
+        Authorization: `Bearer ${auth}`,
+        Accept: 'application/vnd.heroku+json; version=3.partner',
       },
     })
 
@@ -84,7 +97,7 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
         }
       }
       err.body = error.response.data
-      err.http = {statusCode: error.response.status}
+      err.http = { statusCode: error.response.status }
       throw err
     }
 
