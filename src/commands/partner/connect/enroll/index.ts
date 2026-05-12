@@ -22,7 +22,7 @@ export default class Enroll extends BaseCommand {
     const {args, flags} = await this.parse(Enroll)
     const {id_or_slug: idOrSlug} = args
     const {addon: addonId} = flags
-    this.log(`Enrolling add-on ${addonId} into partner integration ${idOrSlug}...`)
+    this.log(`Enrolling add-on ${addonId} to partner integration ${idOrSlug}...`)
     let enrollResponse: Partner.EnrollResponse
     try {
       const endpoint = `/partner/connect/${idOrSlug}/addon/${addonId}/enroll`
@@ -32,41 +32,40 @@ export default class Enroll extends BaseCommand {
       const connErr = error as Partner.ConnectionError
       switch (connErr.body?.id) {
         case 'conflict': {
-          this.error(connErr.body?.message || `Add-on '${addonId}' is already associated with an ISV`)
+          this.error(`Add-on '${addonId}' is already enrolled with an ISV.`)
 
           break
         }
 
         case 'forbidden': {
-          this.error(connErr.body?.message || `Not authorized to enroll add-on '${addonId}'`)
+          this.error(`You're not authorized to enroll the add-on '${addonId}'. Contact your Heroku admin, or open a ticket with Heroku Support to get help with the error: https://help.heroku.com/.`)
 
           break
         }
 
         case 'not_found': {
-          this.error(connErr.body?.message || `Add-on '${addonId}' not found`)
+          this.error(`Add-on '${addonId}' doesn't exist. Check the add-on exists and try again, or enroll a different add-on.`)
 
           break
         }
 
         default: {
-          const message = Partner.formatConnectionError(connErr)
-          this.error(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'.\nReason: ${message}`)
+          this.error(`We can't enroll add-on '${addonId}' to partner integration '${idOrSlug}' due to an unexpected error. Try again, or open a ticket with Heroku Support to get help with the error: https://help.heroku.com/.`)
         }
       }
     }
 
     if (flags.json) {
-        hux.styledJSON(enrollResponse)
-        
-        return
+      hux.styledJSON(enrollResponse)
+
+      return
     }
-    
-    this.log(`✓ ${enrollResponse.message}`)
-    
+
+    this.log(`✓ Successfully enrolled add-on ${addonId} to partner integration ${idOrSlug}.`)
+
     hux.styledObject({
-      'Add-on UUID': enrollResponse.addon_uuid,
-      'ISV GUID': enrollResponse.isv_guid,
+      'Add-on ID': enrollResponse.addon_uuid,
+      'ISV ID': enrollResponse.isv_guid,
       'ISV Slug': enrollResponse.isv_slug,
     })
   }

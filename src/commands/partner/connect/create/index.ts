@@ -73,7 +73,7 @@ export default class Create extends BaseCommand {
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       const message = Partner.formatConnectionError(connErr)
-      this.error(`Unable to create partner integration.\nReason: ${message}`)
+      this.error(`We can't create the partner integration because ${message}.`)
     }
 
     if (flags.json) {
@@ -81,7 +81,7 @@ export default class Create extends BaseCommand {
       return
     }
 
-    this.log('✓ Partner integration created')
+    this.log(`✓ Created partner integration ${integration.slug}.`)
     this.log('')
 
     hux.styledObject({

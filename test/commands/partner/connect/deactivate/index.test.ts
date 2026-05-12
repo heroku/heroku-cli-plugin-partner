@@ -35,7 +35,7 @@ describe('partner:connect:deactivate', () => {
             await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
 
             const output = stripAnsi(stdout.output)
-            expect(output).to.contain('Partner integration deactivated')
+            expect(output).to.contain(`Deactivated partner integration ${idOrSlug}.`)
             expect(output).to.contain('Integration')
             expect(output).to.contain(idOrSlug)
             expect(output).to.contain('Status')
@@ -55,7 +55,7 @@ describe('partner:connect:deactivate', () => {
         await runCommand(Cmd, [idOrSlug, '--confirm', idOrSlug])
 
         const output = stripAnsi(stdout.output)
-        expect(output).to.contain(`Integration already deactivated for ${idOrSlug}`)
+        expect(output).to.contain(`Partner integration ${idOrSlug} is already deactivated.`)
         expect(output).to.contain(idOrSlug)
         expect(stderr.output).to.equal('')
     })
@@ -71,7 +71,7 @@ describe('partner:connect:deactivate', () => {
           expect.fail('Expected command to throw error')
         } catch (error: unknown) {
           const err = error as Error
-          expect(stripAnsi(err.message)).to.contain(`No partner integration found for ${idOrSlug}`)
+          expect(stripAnsi(err.message)).to.contain(`Partner integration ${idOrSlug} doesn't exist.`)
         }
       })
 
@@ -93,7 +93,7 @@ describe('partner:connect:deactivate', () => {
           expect.fail('Expected command to throw error')
         } catch (error: unknown) {
           const err = error as Error
-          expect(stripAnsi(err.message)).to.contain(`Failed to deactivate partner integration for ${idOrSlug}`)
+          expect(stripAnsi(err.message)).to.contain(`We can't deactivate partner integration ${idOrSlug}.`)
         }
       })
     })

@@ -29,10 +29,9 @@ export default class Info extends BaseCommand {
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       if (connErr.body && connErr.body.id === 'record_not_found') {
-        this.error(`No partner integration found for ${idOrSlug}`)
+        this.error(`Partner integration ${idOrSlug} doesn't exist.`)
       } else {
-        const message = Partner.formatConnectionError(connErr)
-        this.error(`Unable to retrieve partner integration details\nReason: ${message}`)
+        this.error(`We can't retrieve partner integration ${idOrSlug} details due to an unexpected error. Try again, or open a ticket with Heroku Support to get help with the error: https://help.heroku.com/.`)
       }
     }
 
@@ -45,13 +44,13 @@ export default class Info extends BaseCommand {
       'Slug': integration.slug,
       'Partner Integration': integration.name,
       'Team': integration.team.name,
-      'Description': integration.description,
-      'Documentation URL': integration.docs_url,
-      'Contact Email': integration.contact_email,
+      'Description': integration.description || '',
+      'Documentation URL': integration.docs_url || '',
+      'Contact Email': integration.contact_email || '',
       'Logo URL': integration.logo_url ? `${integration.logo_url}` : '<Default: Heroku>',
-      'Status': integration.status,
-      'Created At': integration.created_at,
-      'Updated At': integration.updated_at,
+      'Status': integration.status || '',
+      'Created At': integration.created_at || '',
+      'Updated At': integration.updated_at || '',
     })
   }
 }

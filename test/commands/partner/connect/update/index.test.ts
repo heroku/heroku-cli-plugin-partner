@@ -52,7 +52,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration updated')
+    expect(stdout.output).to.contain(`Updated partner integration ${id}.`)
     expect(stderr.output).to.equal('')
   })
 
@@ -117,7 +117,7 @@ describe('partner:connect:update', () => {
     ])
 
     const output = stripAnsi(stdout.output)
-    expect(output).to.contain('Partner integration updated')
+    expect(output).to.contain(`Updated partner integration ${id}.`)
     expect(output).to.contain('Description')
     expect(output).to.contain('New description')
     expect(output).to.contain('Documentation URL')
@@ -140,7 +140,7 @@ describe('partner:connect:update', () => {
     await runCommand(Cmd, [id, '--logo-file', logoFixture])
 
     const output = stripAnsi(stdout.output)
-    expect(output).to.contain('Partner integration updated')
+    expect(output).to.contain(`Updated partner integration ${id}.`)
     expect(output).to.contain('Logo URL')
     expect(output).to.contain('https://example.com/logo.png')
     expect(stderr.output).to.equal('')
@@ -154,7 +154,7 @@ describe('partner:connect:update', () => {
       expect.fail('Expected command to throw error')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Logo file not found')
+      expect(stripAnsi(err.message)).to.contain("We can't find the logo file")
     }
   })
 
@@ -170,7 +170,7 @@ describe('partner:connect:update', () => {
       expect.fail('Expected command to throw')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Unable to update partner integration')
+      expect(stripAnsi(err.message)).to.contain(`We can't update the partner integration ${id} because`)
     }
   })
 
@@ -186,7 +186,7 @@ describe('partner:connect:update', () => {
       expect.fail('Expected command to throw')
     } catch (error: unknown) {
       const err = error as Error
-      expect(stripAnsi(err.message)).to.contain('Unable to update partner integration')
+      expect(stripAnsi(err.message)).to.contain("We can't update the partner integration 1234567890 because")
     }
   })
 
@@ -199,7 +199,7 @@ describe('partner:connect:update', () => {
 
     await runCommand(Cmd, [id])
 
-    expect(stdout.output).to.contain('Partner integration updated')
+    expect(stdout.output).to.contain(`Updated partner integration ${id}.`)
     expect(stderr.output).to.equal('')
   })
 })

@@ -62,7 +62,7 @@ export default class Update extends BaseCommand {
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       const message = Partner.formatConnectionError(connErr)
-      this.error(`Unable to update partner integration.\nReason: ${message}`)
+      this.error(`We can't update the partner integration ${idOrSlug} because ${message}.`)
     }
 
     if (flags.json) {
@@ -70,7 +70,7 @@ export default class Update extends BaseCommand {
       return
     }
 
-    this.log('✓ Partner integration updated')
+    this.log(`✓ Updated partner integration ${idOrSlug}.`)
     this.log('')
 
     hux.styledObject({

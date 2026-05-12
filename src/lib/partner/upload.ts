@@ -18,17 +18,17 @@ export interface UploadOptions {
  */
 export function validateLogoFile(logoFile: string): void {
   if (!existsSync(logoFile)) {
-    throw new Error(`Logo file not found: ${logoFile}`)
+    throw new Error(`We can't find the logo file: ${logoFile}\n\nCheck the location of the logo file and try again.`)
   }
 
   const stats = statSync(logoFile)
   if (!stats.isFile()) {
-    throw new Error(`Logo path is not a file: ${logoFile}`)
+    throw new Error(`Logo path isn't a valid file: ${logoFile}\n\nMake sure the logo path is valid and try again.`)
   }
 
   const maxSize = 5 * 1024 * 1024 // 5MB
   if (stats.size > maxSize) {
-    throw new Error(`Logo file size exceeds 5MB: ${(stats.size / (1024 * 1024)).toFixed(2)}MB`)
+    throw new Error(`Logo file size exceeds 5 MB: ${(stats.size / (1024 * 1024)).toFixed(2)} MB\n\nUse a logo file under 5 MB and try again.`)
   }
 }
 

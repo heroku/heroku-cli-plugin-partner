@@ -47,10 +47,10 @@ describe('partner:connect:enroll', () => {
               .reply(200, enrollResponse)
             await runCommand(Cmd, [idOrSlug, '--addon', addonId])
             const output = stripAnsi(stdout.output)
-            expect(output).to.contain(enrollResponse.message)
-            expect(output).to.contain('Add-on UUID')
+            expect(output).to.contain(`Successfully enrolled add-on ${addonId} to partner integration ${idOrSlug}.`)
+            expect(output).to.contain('Add-on ID')
             expect(output).to.contain(enrollResponse.addon_uuid)
-            expect(output).to.contain('ISV GUID')
+            expect(output).to.contain('ISV ID')
             expect(output).to.contain(enrollResponse.isv_guid)
             expect(output).to.contain('ISV Slug')
             expect(output).to.contain(enrollResponse.isv_slug)
@@ -71,7 +71,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain(`Add-on with UUID '${addonId}' not found`)
+            expect(stripAnsi(err.message)).to.contain(`Add-on '${addonId}' doesn't exist.`)
           }
         })
         it('shows error when add-on is already enrolled', async () => {
@@ -84,7 +84,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain('Add-on is already associated with an ISV')
+            expect(stripAnsi(err.message)).to.contain(`Add-on '${addonId}' is already enrolled with an ISV.`)
           }
         })
         it('shows error when not authorized to enroll add-on', async () => {
@@ -97,7 +97,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain("Add-on's app does not belong to the ISV's team")
+            expect(stripAnsi(err.message)).to.contain(`You're not authorized to enroll the add-on '${addonId}'.`)
           }
         })
         it('shows error when an internal server error occurs', async () => {
@@ -110,7 +110,7 @@ describe('partner:connect:enroll', () => {
             expect.fail('Expected command to throw error')
           } catch (error: unknown) {
             const err = error as Error
-            expect(stripAnsi(err.message)).to.contain(`Failed to enroll add-on '${addonId}' into partner integration '${idOrSlug}'`)
+            expect(stripAnsi(err.message)).to.contain(`We can't enroll add-on '${addonId}' to partner integration '${idOrSlug}' due to an unexpected error.`)
           }
         })
       })

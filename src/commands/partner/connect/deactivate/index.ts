@@ -20,7 +20,7 @@ export default class Deactivate extends BaseCommand {
       description: 'pass in the integration ID or slug to skip confirmation prompts',
     }),
   }
-    
+
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Deactivate)
     const {id_or_slug: idOrSlug} = args
@@ -28,46 +28,46 @@ export default class Deactivate extends BaseCommand {
     await hux.confirmCommand({
       comparison: idOrSlug,
       confirmation: flags.confirm,
-      warningMessage: `This will deactivate the partner integration ${idOrSlug} and destroy all associated Heroku Connect add-ons.`,
-      abortedMessage: 'Deactivation cancelled.',
+      warningMessage: `This command deactivates the partner integration ${idOrSlug} and destroys all associated Heroku Connect add-ons.`,
+      abortedMessage: 'Canceled deactivation.',
     })
 
-    this.log(`Deactivating integration ${idOrSlug}...`)
+    this.log(`Deactivating partner integration ${idOrSlug}...`)
 
+    let body: Partner.DeactivateResponse
     try {
       const endpoint = `/partner/connect/${idOrSlug}`
-      const {body} = await this.apiClient.delete<Partner.DeactivateResponse>(endpoint)
-
-      if (body.id === 'inactive') {
-        this.log(`Integration already deactivated for ${idOrSlug}`)
-        return
-      }
-
-      if (body.summary.failed > 0) {
-        const failedResponses = body.responses.filter(r => r.error || r.status >= 400)
-        const details = failedResponses
-          .map(r => `  - Add-on ${r.addon_guid}: ${r.error || r.message || 'Unknown error'}`)
-          .join('\n')
-        this.log(
-          `Failed to deactivate partner integration for ${idOrSlug}.\n` +
-          `${body.summary.failed} of ${body.summary.total} add-on deletions failed:\n${details}`
-        )
-        this.exit(1)
-      }
-
-      this.log('✓ Partner integration deactivated')
-      hux.styledObject({
-        'Integration': idOrSlug,
-        'Status': body.isv_status,
-      })
+      const response = await this.apiClient.delete<Partner.DeactivateResponse>(endpoint)
+      body = response.body
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       if (connErr.body?.id === 'record_not_found') {
-        this.error(`No partner integration found for ${idOrSlug}`)
+        this.error(`Partner integration ${idOrSlug} doesn't exist.`)
       }
 
-      const message = Partner.formatConnectionError(connErr)
-      this.error(`Failed to deactivate partner integration for ${idOrSlug}.\nReason: ${message}`)
+      this.error(`We can't deactivate partner integration ${idOrSlug} due to an unexpected error. Try again, or open a ticket with Heroku Support to get help with the error: https://help.heroku.com/.`)
     }
+
+    if (body.id === 'inactive') {
+      this.log(`Partner integration ${idOrSlug} is already deactivated.`)
+      return
+    }
+
+    if (body.summary.failed > 0) {
+      const failedResponses = body.responses.filter(r => r.error || r.status >= 400)
+      const details = failedResponses
+        .map(r => `  - Add-on ${r.addon_guid}: ${r.error || r.message || 'Unknown error'}`)
+        .join('\n')
+      this.error(
+        `We can't deactivate partner integration ${idOrSlug}.\n` +
+        `Failed to delete ${body.summary.failed} of ${body.summary.total} add-ons:\n${details}`
+      )
+    }
+
+    this.log(`✓ Deactivated partner integration ${idOrSlug}.`)
+    hux.styledObject({
+      'Integration': idOrSlug,
+      'Status': body.isv_status,
+    })
   }
 }

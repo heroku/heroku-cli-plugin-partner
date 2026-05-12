@@ -54,7 +54,7 @@ describe('partner:connect:create', () => {
       ])
 
       const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Partner integration created')
+      expect(output).to.contain(`Created partner integration ${partnerConnectInfo.slug}.`)
       expect(output).to.contain('Slug')
       expect(output).to.contain(partnerConnectInfo.slug)
       expect(output).to.contain('Partner Integration')
@@ -84,7 +84,7 @@ describe('partner:connect:create', () => {
       ])
 
       const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Partner integration created')
+      expect(output).to.contain(`Created partner integration ${partnerConnectInfo.slug}.`)
       expect(output).to.contain('Logo URL')
       expect(stderr.output).to.equal('')
     })
@@ -108,7 +108,7 @@ describe('partner:connect:create', () => {
         expect.fail('Expected command to throw error')
       } catch (error: unknown) {
         const err = error as Error
-        expect(stripAnsi(err.message)).to.contain('Logo file not found')
+        expect(stripAnsi(err.message)).to.contain("We can't find the logo file")
       }
     })
 
@@ -146,7 +146,7 @@ describe('partner:connect:create', () => {
         expect.fail('Expected command to throw error')
       } catch (error: unknown) {
         const err = error as Error
-        expect(stripAnsi(err.message)).to.contain('Unable to create partner integration')
+        expect(stripAnsi(err.message)).to.contain("We can't create the partner integration because")
         expect(stripAnsi(err.message)).to.contain('Validation failed')
         expect(stripAnsi(err.message)).to.contain('slug: ISV with this slug already exists.')
       }
