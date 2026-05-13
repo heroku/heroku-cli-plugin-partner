@@ -6,6 +6,7 @@
 /dist
 /tmp
 /node_modules
+/.vscode
 oclif.manifest.json
 tsconfig.tsbuildinfo
 
