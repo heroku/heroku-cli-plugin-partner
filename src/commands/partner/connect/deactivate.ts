@@ -1,10 +1,10 @@
 import { color, hux } from '@heroku/heroku-cli-util'
 import { Args, Flags } from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base.js'
-import * as Partner from '../../../../lib/partner/types.js'
+import BaseCommand from '../../../lib/base.js'
+import * as Partner from '../../../lib/partner/types.js'
 
-export default class Deactivate extends BaseCommand {
+export default class PartnerConnectDeactivate extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
     id_or_slug: Args.string({
@@ -23,7 +23,7 @@ export default class Deactivate extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(Deactivate)
+    const { args, flags } = await this.parse(PartnerConnectDeactivate)
     const { id_or_slug: idOrSlug } = args
 
     await hux.confirmCommand({

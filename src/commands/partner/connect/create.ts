@@ -1,11 +1,12 @@
-import { color, hux } from '@heroku/heroku-cli-util'
-import { Args, Flags } from '@oclif/core'
+import * as color from '@heroku/heroku-cli-util/color'
+import {styledJSON, styledObject} from '@heroku/heroku-cli-util/hux'
+import {Args, Flags} from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base.js'
-import * as Partner from '../../../../lib/partner/types.js'
-import { uploadPartnerData, validateLogoFile } from '../../../../lib/partner/upload.js'
+import BaseCommand from '../../../lib/base.js'
+import * as Partner from '../../../lib/partner/types.js'
+import {uploadPartnerData, validateLogoFile} from '../../../lib/partner/upload.js'
 
-export default class Create extends BaseCommand {
+export default class PartnerConnectCreate extends BaseCommand {
   static args = {
     slug: Args.string({
       description: 'name of the partner integration',
@@ -40,7 +41,7 @@ export default class Create extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(Create)
+    const { args, flags } = await this.parse(PartnerConnectCreate)
 
     const isvName = flags['isv-name'] as string
     const logoFile = flags['logo-file']
@@ -78,7 +79,7 @@ export default class Create extends BaseCommand {
     }
 
     if (flags.json) {
-      hux.styledJSON(integration)
+      styledJSON(integration)
       return
     }
 
@@ -86,7 +87,7 @@ export default class Create extends BaseCommand {
     this.log('')
 
     const none = color.disabled('none')
-    hux.styledObject({
+    styledObject({
       Slug: integration.slug,
       'Partner Integration': integration.name,
       Team: integration.team.name,

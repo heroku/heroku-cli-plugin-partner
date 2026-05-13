@@ -1,11 +1,11 @@
 import { color, hux } from '@heroku/heroku-cli-util'
 import { Args, Flags } from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base.js'
-import * as Partner from '../../../../lib/partner/types.js'
-import { uploadPartnerData, validateLogoFile } from '../../../../lib/partner/upload.js'
+import BaseCommand from '../../../lib/base.js'
+import * as Partner from '../../../lib/partner/types.js'
+import { uploadPartnerData, validateLogoFile } from '../../../lib/partner/upload.js'
 
-export default class Update extends BaseCommand {
+export default class PartnerConnectUpdate extends BaseCommand {
   static args = {
     // eslint-disable-next-line camelcase
     id_or_slug: Args.string({
@@ -35,7 +35,7 @@ export default class Update extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(Update)
+    const { args, flags } = await this.parse(PartnerConnectUpdate)
     const { id_or_slug: idOrSlug } = args
     const logoFile = flags['logo-file']
 
