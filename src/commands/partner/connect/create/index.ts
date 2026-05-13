@@ -1,21 +1,22 @@
-import {hux} from '@heroku/heroku-cli-util'
-import {Args, Flags} from '@oclif/core'
+import { color, hux } from '@heroku/heroku-cli-util'
+import { Args, Flags } from '@oclif/core'
 
 import BaseCommand from '../../../../lib/base.js'
 import * as Partner from '../../../../lib/partner/types.js'
-import {uploadPartnerData, validateLogoFile} from '../../../../lib/partner/upload.js'
+import { uploadPartnerData, validateLogoFile } from '../../../../lib/partner/upload.js'
 
 export default class Create extends BaseCommand {
   static args = {
-    slug: Args.string({description: 'name of the partner integration', required: true}),
+    slug: Args.string({
+      description: 'name of the partner integration',
+      required: true,
+    }),
   }
   static description =
     'create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
-  static examples = [
-    '$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"',
-  ]
+  static examples = ['$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"']
   static flags = {
-    json: Flags.boolean({description: 'output in JSON format'}),
+    json: Flags.boolean({ description: 'output in JSON format' }),
     team: Flags.string({
       description: 'Heroku team that owns the partner integration',
       required: true,
@@ -28,7 +29,7 @@ export default class Create extends BaseCommand {
       description: 'description of the integration (up to 500 characters)',
     }),
     'docs-url': Flags.string({
-      description: 'link to partner’s documentation or onboarding guide',
+      description: "link to partner's documentation or onboarding guide",
     }),
     'contact-email': Flags.string({
       description: 'valid email for integration support',
@@ -39,7 +40,7 @@ export default class Create extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const {args, flags} = await this.parse(Create)
+    const { args, flags } = await this.parse(Create)
 
     const isvName = flags['isv-name'] as string
     const logoFile = flags['logo-file']
@@ -73,7 +74,7 @@ export default class Create extends BaseCommand {
     } catch (error) {
       const connErr = error as Partner.ConnectionError
       const message = Partner.formatConnectionError(connErr)
-      this.error(`Unable to create partner integration.\nReason: ${message}`)
+      this.error(`We can't create the partner integration because ${message}`)
     }
 
     if (flags.json) {
@@ -81,19 +82,20 @@ export default class Create extends BaseCommand {
       return
     }
 
-    this.log('✓ Partner integration created')
+    this.log(`✓ Created partner integration ${color.name(integration.slug)}`)
     this.log('')
 
+    const none = color.disabled('none')
     hux.styledObject({
-      'Slug': integration.slug,
+      Slug: integration.slug,
       'Partner Integration': integration.name,
-      'Team': integration.team.name,
-      'Description': integration.description || 'none',
-      'Documentation URL': integration.docs_url || 'none',
-      'Contact Email': integration.contact_email || 'none',
-      'Logo URL': integration.logo_url || 'none',
-      'Status': integration.status || 'none',
-      'Created At': integration.created_at || 'none',
+      Team: integration.team.name,
+      Description: integration.description || none,
+      'Documentation URL': integration.docs_url || none,
+      'Contact Email': integration.contact_email || none,
+      'Logo URL': integration.logo_url || none,
+      Status: integration.status || none,
+      'Created At': integration.created_at || none,
     })
   }
 }

@@ -81,6 +81,7 @@
     "build": "shx rm -rf dist && tsc -b --force && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint-staged": "npx lint-staged",
     "prettier": "prettier . --write --config ./.prettier.mjs",
     "format": "npm run prettier && npm run lint:fix",
     "pretest": "npm run build:dist",
