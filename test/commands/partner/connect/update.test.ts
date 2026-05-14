@@ -5,6 +5,7 @@ import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 import Cmd from '../../../../src/commands/partner/connect/update.js'
+import {partnerConnectInfoWithoutOptionalFields} from '../../../helpers/fixtures.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
@@ -123,6 +124,27 @@ describe('partner:connect:update', () => {
     expect(stdout).to.contain('https://example.com/docs')
     expect(stdout).to.contain('Contact Email')
     expect(stdout).to.contain('partner@example.com')
+    expect(stderr).to.equal('')
+  })
+
+  it('shows \'none\' for fields not set', async () => {
+    api
+      .patch('/partner/connect/d9e459d0-6563-478f-87d1-eb485cea91b9')
+      .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+      .matchHeader('content-type', /multipart\/form-data/)
+      .reply(200, partnerConnectInfoWithoutOptionalFields)
+
+    const {stderr, stdout} = await runCommand(Cmd, [
+      'd9e459d0-6563-478f-87d1-eb485cea91b9',
+    ])
+
+    expect(stdout).to.match(/Description:\s+none/)
+    expect(stdout).to.match(/Documentation URL:\s+none/)
+    expect(stdout).to.match(/Contact Email:\s+none/)
+    expect(stdout).to.match(/Logo URL:\s+none/)
+    expect(stdout).to.match(/Status:\s+none/)
+    expect(stdout).to.match(/Created At:\s+none/)
+    expect(stdout).to.match(/Updated At:\s+none/)
     expect(stderr).to.equal('')
   })
 

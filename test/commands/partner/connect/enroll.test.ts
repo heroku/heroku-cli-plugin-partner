@@ -56,7 +56,7 @@ describe('partner:connect:enroll', () => {
   })
 
   context('when enrolling an add-on fails', () => {
-    it('shows error when add-on is not found', async () => {
+    it('shows API error message when add-on is not found, if present', async () => {
       api
         .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
@@ -69,20 +69,44 @@ describe('partner:connect:enroll', () => {
       expect(error?.message).to.contain(`Add-on with UUID '${addonId}' not found`)
     })
 
-    it('shows error when add-on is already enrolled', async () => {
+    it('shows default error message when add-on is not found, if API error message is not present', async () => {
+      api
+        .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
+        .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .reply(404, {
+          id: 'not_found',
+        })
+
+      const {error} = await runCommand(Cmd, [idOrSlug, '--addon', addonId])
+      expect(error?.message).to.match(/Add-on .* doesn't exist. Check the add-on exists and try again, or enroll a different add-on/)
+    })
+
+    it('shows API error message when add-on is already enrolled, if present', async () => {
       api
         .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
         .reply(409, {
           id: 'conflict',
-          message: 'Add-on is already associated with an ISV',
+          message: 'Add-on is already enrolled with an ISV',
         })
 
       const {error} = await runCommand(Cmd, [idOrSlug, '--addon', addonId])
-      expect(error?.message).to.contain('Add-on is already associated with an ISV')
+      expect(error?.message).to.contain('Add-on is already enrolled with an ISV')
     })
 
-    it('shows error when not authorized to enroll add-on', async () => {
+    it('shows default error message when add-on is already enrolled, if API error message is not present', async () => {
+      api
+        .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
+        .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .reply(409, {
+          id: 'conflict',
+        })
+
+      const {error} = await runCommand(Cmd, [idOrSlug, '--addon', addonId])
+      expect(error?.message).to.match(/Add-on .* is already enrolled with an ISV/)
+    })
+
+    it('shows API error message when not authorized to enroll add-on, if present', async () => {
       api
         .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
@@ -95,6 +119,18 @@ describe('partner:connect:enroll', () => {
       expect(error?.message).to.contain("Add-on's app does not belong to the ISV's team")
     })
 
+    it('shows default error message when not authorized to enroll add-on, if API error message is not present', async () => {
+      api
+        .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
+        .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .reply(403, {
+          id: 'forbidden',
+        })
+
+      const {error} = await runCommand(Cmd, [idOrSlug, '--addon', addonId])
+      expect(error?.message).to.contain('You\'re not authorized to enroll the add-on')
+    })
+
     it('shows error when an internal server error occurs', async () => {
       api
         .post(`/partner/connect/${idOrSlug}/addon/${addonId}/enroll`)
@@ -105,7 +141,7 @@ describe('partner:connect:enroll', () => {
         })
 
       const {error} = await runCommand(Cmd, [idOrSlug, '--addon', addonId])
-      expect(error?.message).to.match(/We can't enroll add-on .* to partner integration .*/)
+      expect(error?.message).to.match(/We can't enroll add-on .* to partner integration/)
     })
   })
 })

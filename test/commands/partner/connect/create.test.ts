@@ -5,7 +5,7 @@ import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 
 import Cmd from '../../../../src/commands/partner/connect/create.js'
-import {partnerConnectInfo} from '../../../helpers/fixtures.js'
+import {partnerConnectInfo, partnerConnectInfoWithoutOptionalFields} from '../../../helpers/fixtures.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
@@ -56,6 +56,64 @@ describe('partner:connect:create', () => {
       expect(stdout).to.contain(partnerConnectInfo.slug)
       expect(stdout).to.contain('Partner Integration')
       expect(stdout).to.contain(partnerConnectInfo.name)
+      expect(stderr).to.equal('')
+    })
+
+    it('creates partner connect integration with JSON output', async () => {
+      const slug = 'test-integration'
+      const team = 'test-team'
+      const isvName = 'Test ISV'
+      const description = 'Test description'
+      const contactEmail = 'test@example.com'
+
+      api
+        .post('/partner/connect')
+        .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .matchHeader('content-type', /multipart\/form-data/)
+        .reply(201, partnerConnectInfo)
+
+      const {stderr, stdout} = await runCommand(Cmd, [
+        slug,
+        '--team',
+        team,
+        '--isv-name',
+        isvName,
+        '--description',
+        description,
+        '--contact-email',
+        contactEmail,
+        '--json',
+      ])
+
+      expect(JSON.parse(stdout)).to.deep.equal(partnerConnectInfo)
+      expect(stderr).to.equal('')
+    })
+
+    it('creates partner connect and shows none for optional fields not provided', async () => {
+      const slug = 'test-integration'
+      const team = 'test-team'
+      const isvName = 'Test ISV'
+
+      api
+        .post('/partner/connect')
+        .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
+        .matchHeader('content-type', /multipart\/form-data/)
+        .reply(201, partnerConnectInfoWithoutOptionalFields)
+
+      const {stderr, stdout} = await runCommand(Cmd, [
+        slug,
+        '--team',
+        team,
+        '--isv-name',
+        isvName,
+      ])
+
+      expect(stdout).to.match(/Description:\s+none/)
+      expect(stdout).to.match(/Documentation URL:\s+none/)
+      expect(stdout).to.match(/Contact Email:\s+none/)
+      expect(stdout).to.match(/Logo URL:\s+none/)
+      expect(stdout).to.match(/Status:\s+none/)
+      expect(stdout).to.match(/Created At:\s+none/)
       expect(stderr).to.equal('')
     })
 

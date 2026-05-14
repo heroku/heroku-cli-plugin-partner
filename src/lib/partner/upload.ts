@@ -1,7 +1,7 @@
-import { vars } from '@heroku-cli/command'
-import axios, { isAxiosError } from 'axios'
+import {vars} from '@heroku-cli/command'
+import axios, {isAxiosError} from 'axios'
 import FormData from 'form-data'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import {existsSync, readFileSync, statSync} from 'node:fs'
 import path from 'node:path'
 import tsheredoc from 'tsheredoc'
 
@@ -47,7 +47,7 @@ export function validateLogoFile(logoFile: string): void {
  * Upload partner integration data with optional logo file
  */
 export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
-  const { auth, endpoint, fields, logoFile, method = 'POST' } = options
+  const {auth, endpoint, fields, logoFile, method = 'POST'} = options
 
   // Create FormData with all fields
   const formData = new FormData()
@@ -72,14 +72,14 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
 
   try {
     const response = await axios({
-      method,
-      url,
       data: formData,
       headers: {
         ...formData.getHeaders(),
-        Authorization: `Bearer ${auth}`,
         Accept: 'application/vnd.heroku+json; version=3.partner',
+        Authorization: `Bearer ${auth}`,
       },
+      method,
+      url,
     })
 
     return response.data
@@ -97,7 +97,7 @@ export async function uploadPartnerData<T>(options: UploadOptions): Promise<T> {
         }
       }
       err.body = error.response.data
-      err.http = { statusCode: error.response.status }
+      err.http = {statusCode: error.response.status}
       throw err
     }
 
