@@ -26,12 +26,12 @@ export const deactivateResponse = {
   isv_guid: '3c0b2b51-8431-4ce8-8e5f-b4a76e509b36',
   isv_status: 'inactive',
   message: 'Integration deactivated',
-  summary: {
-    total: 1,
-    succeeded: 1,
-    failed: 0,
-  },
   responses: [],
+  summary: {
+    failed: 0,
+    succeeded: 1,
+    total: 1,
+  },
 }
 
 export const enrollResponse = {

@@ -1,21 +1,19 @@
-import { expect } from 'chai'
+import {runCommand} from '@heroku-cli/test-utils'
+import {expect} from 'chai'
 import nock from 'nock'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { stderr, stdout } from 'stdout-stderr'
+import {fileURLToPath} from 'node:url'
 
-import Cmd from '../../../../../src/commands/partner/connect/create/index.js'
-import { partnerConnectInfo } from '../../../../helpers/fixtures.js'
-import stripAnsi from '../../../../helpers/strip-ansi.js'
-import { runCommand } from '../../../../run-command.js'
+import Cmd from '../../../../src/commands/partner/connect/create.js'
+import {partnerConnectInfo} from '../../../helpers/fixtures.js'
 
 const PARTNER_CONNECT_ACCEPT_HEADER = 'application/vnd.heroku+json; version=3.partner'
 
 describe('partner:connect:create', () => {
   let api: nock.Scope
-  const { env } = process
+  const {env} = process
   const testDir = path.dirname(fileURLToPath(import.meta.url))
-  const logoFixture = path.join(testDir, '../../../../fixtures/logo.png')
+  const logoFixture = path.join(testDir, '../../../fixtures/logo.png')
 
   beforeEach(() => {
     process.env = {}
@@ -41,7 +39,7 @@ describe('partner:connect:create', () => {
         .matchHeader('content-type', /multipart\/form-data/)
         .reply(201, partnerConnectInfo)
 
-      await runCommand(Cmd, [
+      const {stderr, stdout} = await runCommand(Cmd, [
         slug,
         '--team',
         team,
@@ -53,13 +51,12 @@ describe('partner:connect:create', () => {
         contactEmail,
       ])
 
-      const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Created partner integration')
-      expect(output).to.contain('Slug')
-      expect(output).to.contain(partnerConnectInfo.slug)
-      expect(output).to.contain('Partner Integration')
-      expect(output).to.contain(partnerConnectInfo.name)
-      expect(stderr.output).to.equal('')
+      expect(stdout).to.contain('Created partner integration')
+      expect(stdout).to.contain('Slug')
+      expect(stdout).to.contain(partnerConnectInfo.slug)
+      expect(stdout).to.contain('Partner Integration')
+      expect(stdout).to.contain(partnerConnectInfo.name)
+      expect(stderr).to.equal('')
     })
 
     it('uploads logo file when provided', async () => {
@@ -76,12 +73,11 @@ describe('partner:connect:create', () => {
           logo_url: 'https://example.com/logo.png',
         })
 
-      await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFixture])
+      const {stderr, stdout} = await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFixture])
 
-      const output = stripAnsi(stdout.output)
-      expect(output).to.contain('Created partner integration')
-      expect(output).to.contain('Logo URL')
-      expect(stderr.output).to.equal('')
+      expect(stdout).to.contain('Created partner integration')
+      expect(stdout).to.contain('Logo URL')
+      expect(stderr).to.equal('')
     })
 
     it('validates logo file exists', async () => {
@@ -90,13 +86,8 @@ describe('partner:connect:create', () => {
       const isvName = 'Test ISV'
       const logoFile = '/tmp/nonexistent-' + Date.now() + '.png'
 
-      try {
-        await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFile])
-        expect.fail('Expected command to throw error')
-      } catch (error: unknown) {
-        const err = error as Error
-        expect(stripAnsi(err.message)).to.contain("We can't find the logo file")
-      }
+      const {error} = await runCommand(Cmd, [slug, '--team', team, '--isv-name', isvName, '--logo-file', logoFile], undefined, {print: true})
+      expect(error?.message).to.contain("We can't find the logo file")
     })
 
     it('handles API errors with specific error message', async () => {
@@ -111,32 +102,27 @@ describe('partner:connect:create', () => {
         .matchHeader('accept', PARTNER_CONNECT_ACCEPT_HEADER)
         .matchHeader('content-type', /multipart\/form-data/)
         .reply(400, {
-          id: 'validation_error',
-          message: 'Validation failed',
           errors: {
             slug: ['ISV with this slug already exists.'],
           },
+          id: 'validation_error',
+          message: 'Validation failed',
         })
 
-      try {
-        await runCommand(Cmd, [
-          slug,
-          '--team',
-          team,
-          '--isv-name',
-          isvName,
-          '--description',
-          description,
-          '--contact-email',
-          contactEmail,
-        ])
-        expect.fail('Expected command to throw error')
-      } catch (error: unknown) {
-        const err = error as Error
-        expect(stripAnsi(err.message)).to.contain("We can't create the partner integration")
-        expect(stripAnsi(err.message)).to.contain('Validation failed')
-        expect(stripAnsi(err.message)).to.contain('slug: ISV with this slug already exists.')
-      }
+      const {error} = await runCommand(Cmd, [
+        slug,
+        '--team',
+        team,
+        '--isv-name',
+        isvName,
+        '--description',
+        description,
+        '--contact-email',
+        contactEmail,
+      ])
+      expect(error?.message).to.contain("We can't create the partner integration")
+      expect(error?.message).to.contain('Validation failed')
+      expect(error?.message).to.contain('slug: ISV with this slug already exists.')
     })
   })
 })

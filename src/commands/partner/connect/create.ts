@@ -1,6 +1,6 @@
 import * as color from '@heroku/heroku-cli-util/color'
 import {styledJSON, styledObject} from '@heroku/heroku-cli-util/hux'
-import {Args, Flags} from '@oclif/core'
+import {Args, Flags, ux} from '@oclif/core'
 
 import BaseCommand from '../../../lib/base.js'
 import * as Partner from '../../../lib/partner/types.js'
@@ -13,18 +13,12 @@ export default class PartnerConnectCreate extends BaseCommand {
       required: true,
     }),
   }
-  static description =
-    'create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
+  static description
+    = 'create a partner integration record for Heroku Connect and store the ISV metadata used in Heroku Connect and Salesforce setup flows'
   static examples = ['$ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"']
   static flags = {
-    json: Flags.boolean({ description: 'output in JSON format' }),
-    team: Flags.string({
-      description: 'Heroku team that owns the partner integration',
-      required: true,
-    }),
-    'isv-name': Flags.string({
-      description: 'name of the ISV or partner publishing the integration',
-      required: true,
+    'contact-email': Flags.string({
+      description: 'valid email for integration support',
     }),
     description: Flags.string({
       description: 'description of the integration (up to 500 characters)',
@@ -32,16 +26,22 @@ export default class PartnerConnectCreate extends BaseCommand {
     'docs-url': Flags.string({
       description: "link to partner's documentation or onboarding guide",
     }),
-    'contact-email': Flags.string({
-      description: 'valid email for integration support',
+    'isv-name': Flags.string({
+      description: 'name of the ISV or partner publishing the integration',
+      required: true,
     }),
+    json: Flags.boolean({description: 'output in JSON format'}),
     'logo-file': Flags.string({
       description: 'image path for the ISV logo',
+    }),
+    team: Flags.string({
+      description: 'Heroku team that owns the partner integration',
+      required: true,
     }),
   }
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(PartnerConnectCreate)
+    const {args, flags} = await this.parse(PartnerConnectCreate)
 
     const isvName = flags['isv-name'] as string
     const logoFile = flags['logo-file']
@@ -61,14 +61,12 @@ export default class PartnerConnectCreate extends BaseCommand {
         auth: this.heroku.auth,
         endpoint: '/partner/connect',
         fields: {
+          contact_email: flags['contact-email'],
+          description: flags.description,
+          docs_url: flags['docs-url'],
           name: isvName,
           slug: args.slug,
           team: flags.team,
-          // eslint-disable-next-line camelcase
-          contact_email: flags['contact-email'],
-          description: flags.description,
-          // eslint-disable-next-line camelcase
-          docs_url: flags['docs-url'],
         },
         logoFile,
       })
@@ -83,10 +81,11 @@ export default class PartnerConnectCreate extends BaseCommand {
       return
     }
 
-    this.log(`✓ Created partner integration ${color.name(integration.slug)}`)
-    this.log('')
+    ux.stdout(`✓ Created partner integration ${color.name(integration.slug)}`)
+    ux.stdout('')
 
     const none = color.disabled('none')
+    /* eslint-disable perfectionist/sort-objects */
     styledObject({
       Slug: integration.slug,
       'Partner Integration': integration.name,
@@ -98,5 +97,6 @@ export default class PartnerConnectCreate extends BaseCommand {
       Status: integration.status || none,
       'Created At': integration.created_at || none,
     })
+    /* eslint-enable perfectionist/sort-objects */
   }
 }
