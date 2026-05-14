@@ -40,8 +40,8 @@ create a partner integration record for Heroku Connect and store the ISV metadat
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--prompt] [--json] [--description <value>]
-    [--docs-url <value>] [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:create SLUG --isv-name <value> --team <value> [--prompt] [--contact-email <value>] [--description
+    <value>] [--docs-url <value>] [--json] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  name of the partner integration
@@ -155,8 +155,8 @@ update a partner integration record for Heroku Connect and store the ISV metadat
 
 ```
 USAGE
-  $ heroku partner:connect:update ID_OR_SLUG [--prompt] [--json] [--description <value>] [--docs-url <value>]
-    [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:update ID_OR_SLUG [--prompt] [--contact-email <value>] [--description <value>] [--docs-url
+    <value>] [--json] [--logo-file <value>]
 
 ARGUMENTS
   ID_OR_SLUG  ID or name of the partner integration
