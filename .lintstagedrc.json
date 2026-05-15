@@ -1,3 +1,0 @@
-{
-  "**/*.{ts,tsx,cjs,mjs,js}": ["npm run format"]
-}

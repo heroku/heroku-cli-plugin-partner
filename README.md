@@ -40,8 +40,8 @@ create a partner integration record for Heroku Connect and store the ISV metadat
 
 ```
 USAGE
-  $ heroku partner:connect:create SLUG --team <value> --isv-name <value> [--prompt] [--json] [--description <value>]
-    [--docs-url <value>] [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:create SLUG --isv-name <value> --team <value> [--prompt] [--contact-email <value>] [--description
+    <value>] [--docs-url <value>] [--json] [--logo-file <value>]
 
 ARGUMENTS
   SLUG  name of the partner integration
@@ -66,7 +66,7 @@ EXAMPLES
   $ heroku partner:connect:create acme-integration --team acme-team --isv-name "Acme Integrations"
 ```
 
-_See code: [src/commands/partner/connect/create/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/create/index.ts)_
+_See code: [src/commands/partner/connect/create.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/create.ts)_
 
 ## `heroku partner:connect:deactivate ID_OR_SLUG`
 
@@ -94,7 +94,7 @@ EXAMPLES
   $ heroku partner:connect:deactivate acme-integrations
 ```
 
-_See code: [src/commands/partner/connect/deactivate/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate/index.ts)_
+_See code: [src/commands/partner/connect/deactivate.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/deactivate.ts)_
 
 ## `heroku partner:connect:enroll ID_OR_SLUG`
 
@@ -121,7 +121,7 @@ EXAMPLES
   $ heroku partner:connect:enroll acme-integrations --addon addon-id
 ```
 
-_See code: [src/commands/partner/connect/enroll/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/enroll/index.ts)_
+_See code: [src/commands/partner/connect/enroll.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/enroll.ts)_
 
 ## `heroku partner:connect:info ID_OR_SLUG`
 
@@ -147,7 +147,7 @@ EXAMPLES
   $ heroku partner:connect:info acme-integrations
 ```
 
-_See code: [src/commands/partner/connect/info/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info/index.ts)_
+_See code: [src/commands/partner/connect/info.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/info.ts)_
 
 ## `heroku partner:connect:update ID_OR_SLUG`
 
@@ -155,8 +155,8 @@ update a partner integration record for Heroku Connect and store the ISV metadat
 
 ```
 USAGE
-  $ heroku partner:connect:update ID_OR_SLUG [--prompt] [--json] [--description <value>] [--docs-url <value>]
-    [--contact-email <value>] [--logo-file <value>]
+  $ heroku partner:connect:update ID_OR_SLUG [--prompt] [--contact-email <value>] [--description <value>] [--docs-url
+    <value>] [--json] [--logo-file <value>]
 
 ARGUMENTS
   ID_OR_SLUG  ID or name of the partner integration
@@ -179,7 +179,7 @@ EXAMPLES
   $ heroku partner:connect:update acme-integrations --description "Version 2 of the Acme integration"
 ```
 
-_See code: [src/commands/partner/connect/update/index.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/update/index.ts)_
+_See code: [src/commands/partner/connect/update.ts](https://github.com/heroku/heroku-cli-plugin-partner/blob/v0.0.0/src/commands/partner/connect/update.ts)_
 <!-- commandsstop -->
 
 # Development

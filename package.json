@@ -5,46 +5,41 @@
   "author": "Heroku",
   "bugs": "https://github.com/heroku/heroku-cli-plugin-partner/issues",
   "dependencies": {
-    "@heroku-cli/color": "^2",
-    "@heroku-cli/command": "^12.2.1",
+    "@heroku-cli/command": "^12.3.3",
     "@heroku-cli/schema": "^2.0.1",
-    "@heroku/heroku-cli-util": "^10.6.1",
+    "@heroku/heroku-cli-util": "^10.8.0",
     "@oclif/core": "^4.10.0",
-    "@oclif/plugin-help": "^6",
-    "@types/form-data": "^2.2.1",
-    "axios": "^1.13.6",
+    "@oclif/plugin-help": "^6.2.48",
+    "@types/form-data": "^2.5.2",
+    "axios": "^1.15.2",
     "form-data": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/compat": "^1",
-    "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
-    "@types/chai": "^4",
+    "@heroku-cli/test-utils": "^0.2.0",
+    "@oclif/test": "^4.1.18",
+    "@types/chai": "^4.3.14",
     "@types/mocha": "^10",
     "@types/nock": "^10.0.3",
     "@types/node": "22.14.1",
     "@types/sinon": "^21.0.0",
     "c8": "^11.0.0",
-    "chai": "^4",
+    "chai": "^5.3.3",
     "eslint": "^9",
-    "eslint-config-oclif": "^6",
-    "eslint-config-prettier": "^10",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
+    "eslint-config-oclif": "^6.0.164",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "mocha": "^10",
-    "nock": "^14.0.11",
+    "nock": "^14.0.15",
     "oclif": "^4",
-    "prettier": "^3.8.3",
     "shx": "^0.3.3",
     "sinon": "^21.0.2",
-    "stdout-stderr": "^0.1.13",
     "strip-ansi": "^7.2.0",
     "ts-node": "^10",
     "tsheredoc": "^1.0.1",
     "typescript": "^5"
   },
   "engines": {
-    "node": ">= 22"
+    "node": ">=22"
   },
   "overrides": {
     "serialize-javascript": "^7.0.5"
@@ -70,22 +65,24 @@
     ],
     "topics": {
       "partner": {
-        "description": "manage Heroku partner integrations"
+        "description": "manage Heroku partner integrations",
+        "subtopics": {
+          "connect": {
+            "description": "manage Heroku Connect integrations"
+          }
+        }
       }
     }
   },
   "repository": "heroku/heroku-cli-plugin-partner",
   "scripts": {
-    "prepare": "husky && npm run build",
-    "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest && shx cp oclif.manifest.json ./dist/oclif.manifest.json",
-    "build": "shx rm -rf dist && tsc -b --force && oclif manifest && oclif readme && shx cp oclif.manifest.json ./dist/oclif.manifest.json && shx cp README.md ./dist/README.md",
+    "prepare": "npm run build",
+    "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest",
+    "build": "shx rm -rf dist && tsc && npm run manifest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint-staged": "npx lint-staged",
-    "prettier": "prettier . --write --config ./.prettier.mjs",
-    "format": "npm run prettier && npm run lint:fix",
+    "manifest": "oclif manifest",
     "pretest": "npm run build:dist",
-    "posttest": "npm run lint",
     "test": "c8 mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },

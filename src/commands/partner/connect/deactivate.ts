@@ -1,12 +1,13 @@
-import { color, hux } from '@heroku/heroku-cli-util'
-import { Args, Flags } from '@oclif/core'
+import * as color from '@heroku/heroku-cli-util/color'
+import {confirmCommand, styledObject} from '@heroku/heroku-cli-util/hux'
+import {Args, Flags, ux} from '@oclif/core'
 
-import BaseCommand from '../../../../lib/base.js'
-import * as Partner from '../../../../lib/partner/types.js'
+import BaseCommand from '../../../lib/base.js'
+import * as Partner from '../../../lib/partner/types.js'
 
-export default class Deactivate extends BaseCommand {
+export default class PartnerConnectDeactivate extends BaseCommand {
   static args = {
-    // eslint-disable-next-line camelcase
+
     id_or_slug: Args.string({
       description: 'ID or name of the partner integration',
       required: true,
@@ -23,41 +24,39 @@ export default class Deactivate extends BaseCommand {
   }
 
   async run(): Promise<void> {
-    const { args, flags } = await this.parse(Deactivate)
-    const { id_or_slug: idOrSlug } = args
+    const {args, flags} = await this.parse(PartnerConnectDeactivate)
+    const {id_or_slug: idOrSlug} = args
 
-    await hux.confirmCommand({
+    await confirmCommand({
+      abortedMessage: 'Canceled deactivation.',
       comparison: idOrSlug,
       confirmation: flags.confirm,
       warningMessage: `This command deactivates the partner integration ${color.name(idOrSlug)} and destroys all associated Heroku Connect add-ons.`,
-      abortedMessage: 'Canceled deactivation.',
     })
 
-    this.log(`Deactivating partner integration ${color.name(idOrSlug)}...`)
+    ux.stdout(`Deactivating partner integration ${color.name(idOrSlug)}...`)
 
     try {
       const endpoint = `/partner/connect/${idOrSlug}`
-      const { body } = await this.apiClient.delete<Partner.DeactivateResponse>(endpoint)
+      const {body} = await this.apiClient.delete<Partner.DeactivateResponse>(endpoint)
 
       if (body.id === 'inactive') {
-        this.log(`Partner integration ${color.name(idOrSlug)} is already deactivated.`)
+        ux.stdout(`Partner integration ${color.name(idOrSlug)} is already deactivated.`)
         return
       }
 
       if (body.summary.failed > 0) {
-        const failedResponses = body.responses.filter((r) => r.error || r.status >= 400)
+        const failedResponses = body.responses.filter(r => r.error || r.status >= 400)
         const details = failedResponses
-          .map((r) => `  - Add-on ${r.addon_guid}: ${r.error || r.message || 'Unknown error'}`)
+          .map(r => `  - Add-on ${r.addon_guid}: ${r.error || r.message || 'Unknown error'}`)
           .join('\n')
-        this.log(
-          `We can't deactivate partner integration ${color.name(idOrSlug)}.\n` +
-            `${body.summary.failed} of ${body.summary.total} add-on deletions failed:\n${details}`
-        )
+        ux.stdout(`We can't deactivate partner integration ${color.name(idOrSlug)}.\n`
+            + `${body.summary.failed} of ${body.summary.total} add-on deletions failed:\n${details}`)
         this.exit(1)
       }
 
-      this.log(`✓ Deactivated partner integration ${color.name(idOrSlug)}`)
-      hux.styledObject({
+      ux.stdout(`✓ Deactivated partner integration ${color.name(idOrSlug)}`)
+      styledObject({
         Integration: idOrSlug,
         Status: body.isv_status,
       })
