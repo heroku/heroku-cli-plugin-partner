@@ -188,15 +188,15 @@ _See code: [src/commands/partner/connect/update.ts](https://github.com/heroku/he
 
 ```
 mise install
-yarn
+npm install
 ```
 
-## Generate the docs
+## Build the plugin
 ```
-yarn build
+npm run build
 ```
 
 ## Run eslint
 ```
-yarn lint
+npm run lint
 ```
