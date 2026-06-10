@@ -1,5 +1,5 @@
 {
-  "name": "heroku-cli-plugin-partner",
+  "name": "@heroku-cli/plugin-partner",
   "description": "Heroku CLI plugin for Heroku partner integrations",
   "version": "0.0.0",
   "author": "Heroku",
