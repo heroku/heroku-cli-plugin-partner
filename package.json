@@ -1,7 +1,7 @@
 {
   "name": "@heroku-cli/plugin-partner",
   "description": "Heroku CLI plugin for Heroku partner integrations",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Heroku",
   "bugs": "https://github.com/heroku/heroku-cli-plugin-partner/issues",
   "dependencies": {
@@ -74,7 +74,10 @@
       }
     }
   },
-  "repository": "heroku/heroku-cli-plugin-partner",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heroku/heroku-cli-plugin-partner.git"
+  },
   "scripts": {
     "prepare": "npm run build",
     "build:dist": "shx rm -rf dist && tsc -b --force && oclif manifest",
