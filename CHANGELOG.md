@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.1...plugin-partner-v1.0.2) (2026-09-23)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 12.4.0 to 13.1.0 ([#87](https://github.com/heroku/heroku-cli-plugin-partner/issues/87)) ([ae33584](https://github.com/heroku/heroku-cli-plugin-partner/commit/ae33584e148d922c4e7bc4f46d1eb61f521bfe19))
+* bump @heroku-cli/command from 13.1.0 to 13.2.0 ([#95](https://github.com/heroku/heroku-cli-plugin-partner/issues/95)) ([d47d5a4](https://github.com/heroku/heroku-cli-plugin-partner/commit/d47d5a419ef70c6f945d82275a70868dcfeba34f))
+
 ## [1.0.1](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.0...plugin-partner-v1.0.1) (2026-08-21)
 
 
