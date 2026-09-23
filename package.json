@@ -30,7 +30,7 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "mocha": "^10",
     "nock": "^14.0.15",
-    "oclif": "^4",
+    "oclif": "^6",
     "shx": "^0.4.0",
     "sinon": "^21.0.2",
     "strip-ansi": "^7.2.0",
