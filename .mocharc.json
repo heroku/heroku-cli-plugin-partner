@@ -6,8 +6,9 @@
     "loader=ts-node/esm",
     "experimental-specifier-resolution=node"
   ],
-  "watch-extensions": [
-    "ts"
+  "watch-files": [
+    "test/**/*.ts",
+    "src/**/*.ts"
   ],
   "recursive": true,
   "reporter": "spec",
