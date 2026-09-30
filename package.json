@@ -57,6 +57,7 @@
   "type": "module",
   "main": "dist/index.js",
   "oclif": {
+    "repositoryPrefix": "<%- repo %>/blob/plugin-partner-v<%- version %>/<%- commandPath %>",
     "commands": "./dist/commands",
     "bin": "heroku",
     "dirname": "heroku-cli-plugin-partner",
