@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.3](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.2...plugin-partner-v1.0.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* correct broken source links in generated command docs ([#103](https://github.com/heroku/heroku-cli-plugin-partner/issues/103)) ([f70b5a5](https://github.com/heroku/heroku-cli-plugin-partner/commit/f70b5a57984c48e87e0f1a2517be38ccd50698ca))
+
+
+### Dependencies
+
+* bump @heroku/heroku-cli-util from 10.9.2 to 10.10.1 ([#101](https://github.com/heroku/heroku-cli-plugin-partner/issues/101)) ([bb4d7d3](https://github.com/heroku/heroku-cli-plugin-partner/commit/bb4d7d3484d875c99dbf412696216462a790d8a7))
+* bump @oclif/core from 4.11.14 to 4.14.0 ([#98](https://github.com/heroku/heroku-cli-plugin-partner/issues/98)) ([a95105f](https://github.com/heroku/heroku-cli-plugin-partner/commit/a95105f39ca51ad9dfc81103231fa20a7080798b))
+* bump @oclif/plugin-help from 6.2.53 to 7.0.0 ([#99](https://github.com/heroku/heroku-cli-plugin-partner/issues/99)) ([7e3576d](https://github.com/heroku/heroku-cli-plugin-partner/commit/7e3576da1360714cfa7922ca7e615b71544efa1b))
+* bump axios from 1.19.0 to 1.20.0 ([#104](https://github.com/heroku/heroku-cli-plugin-partner/issues/104)) ([ed1af52](https://github.com/heroku/heroku-cli-plugin-partner/commit/ed1af5273b7c48efb18b372f8c0db187fbdb9d3f))
+
 ## [1.0.2](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.1...plugin-partner-v1.0.2) (2026-09-23)
 
 
