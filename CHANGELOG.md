@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.4](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.3...plugin-partner-v1.0.4) (2026-10-29)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 13.2.0 to 13.2.4 ([#110](https://github.com/heroku/heroku-cli-plugin-partner/issues/110)) ([e5bce92](https://github.com/heroku/heroku-cli-plugin-partner/commit/e5bce923623f141d59009569a13a1a12d3980b14))
+* bump @heroku/heroku-cli-util from 10.10.1 to 10.10.2 ([#108](https://github.com/heroku/heroku-cli-plugin-partner/issues/108)) ([bf6ff99](https://github.com/heroku/heroku-cli-plugin-partner/commit/bf6ff99a0075f6e961e770368d29ab3fe9b541db))
+* bump @oclif/plugin-help from 7.0.0 to 7.0.2 ([#109](https://github.com/heroku/heroku-cli-plugin-partner/issues/109)) ([2161d79](https://github.com/heroku/heroku-cli-plugin-partner/commit/2161d7932d9dbb77b2d8d2d13849c7ca0090c78a))
+* bump follow-redirects from 1.16.0 to 1.16.1 ([#115](https://github.com/heroku/heroku-cli-plugin-partner/issues/115)) ([8d6837b](https://github.com/heroku/heroku-cli-plugin-partner/commit/8d6837b7018690e450e437dff1bad23771e54ae3))
+* bump source-map-js from 1.2.1 to 1.2.2 ([#112](https://github.com/heroku/heroku-cli-plugin-partner/issues/112)) ([e7ee126](https://github.com/heroku/heroku-cli-plugin-partner/commit/e7ee1262992ef70e072a060c5a50503d4a4e3909))
+
 ## [1.0.3](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.2...plugin-partner-v1.0.3) (2026-10-01)
 
 
