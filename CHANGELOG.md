@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.4...plugin-partner-v1.0.5) (2026-11-09)
+
+
+### Dependencies
+
+* bump follow-redirects from 1.16.1 to 1.16.2 ([#124](https://github.com/heroku/heroku-cli-plugin-partner/issues/124)) ([36e72dd](https://github.com/heroku/heroku-cli-plugin-partner/commit/36e72dd9b52932913dd0a94606ed1be2414646cb))
+
 ## [1.0.4](https://github.com/heroku/heroku-cli-plugin-partner/compare/plugin-partner-v1.0.3...plugin-partner-v1.0.4) (2026-10-29)
 
 
