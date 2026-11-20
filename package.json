@@ -15,7 +15,7 @@
     "form-data": "^4.0.5"
   },
   "devDependencies": {
-    "@eslint/compat": "^1",
+    "@eslint/compat": "^2",
     "@heroku-cli/test-utils": "^1.0.2",
     "@oclif/test": "^4.1.18",
     "@types/chai": "^5.2.3",
