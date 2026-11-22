@@ -21,7 +21,7 @@
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10",
     "@types/nock": "^11.1.0",
-    "@types/node": "22.14.1",
+    "@types/node": "26.6.6",
     "@types/sinon": "^22.0.2",
     "c8": "^11.0.0",
     "chai": "^6.2.2",
